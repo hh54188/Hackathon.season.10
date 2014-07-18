@@ -1,3 +1,5 @@
+# Gesture Recognition Engine
+
 ```
 var GRE = new GestureRecognitionEngine();
 
