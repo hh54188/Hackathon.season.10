@@ -1,4 +1,4 @@
-var toArray = function () {
+var toArray = function (arguments) {
     return Array.prototype.slice.call(arguments);
 };
 
@@ -11,26 +11,25 @@ var isArray = function (array) {
 };
 
 var isString = function (str) {
-    return Object.prototype.toString.call(array) == "[object String]"? true: false;
+    return Object.prototype.toString.call(str) == "[object String]"? true: false;
 };
 
 
 define([
     "./gestures/native/circle", 
-    "./gestures/native/swipe",
-    "./gestures/native/keyTaps",
-    "./gestures/native/screenTaps"], function () {
-
+    "./gestures/native/swipe"], function (circle, swipe) {
     var gestures = (function GestureValidate(gestures) {
+
         var result = [];
-        (isArray(gestures)? gestures: [gestures]).forEach(function (gesture) {
+        toArray(gestures).forEach(function (gesture) {
+            // Duck type check
             if (isFunction(gesture.checkGesture) && isString(gesture.eventName)) {
                 result.push(gesture);
             }
         });
 
         return result;
-    })(toArray(arguments));
+    })(arguments);
 
     function GestureRecognitionEngine() {
 
@@ -38,44 +37,56 @@ define([
         this._gestures = gestures;
         this._gestureCount;
 
-        // var _this = this;
-        // gestures.forEach(function (gesture) {
-        //     _this._registeredEventList[gesture.eventName] = [];
-        // });
-        // this._gestureCount = this._gestures.length
+        this._registerEvent();
     }
 
     GestureRecognitionEngine.prototype = {
 
         constructor: GestureRecognitionEngine,
 
-        _init: function () {
-            var eventList = this._registeredEventList;
-
-        },
-
-        _registerEvent: function (type, isGesture) {
-
-        },
-
-        _checkGesture: function () {
+        _registerEvent: function () {
             var gestures = this._gestures;
+            var eventList = this._registeredEventList;
+
+            gestures.forEach(function (gesture) {
+                eventList[gesture.eventName] = [];
+            });
+
+            this._gestureCount = eventList.length;
         },
 
-        on: function (event, callback) {
-            var eventList = this._registeredEventList;
-            if (eventList.indexOf(event) == -1) return;
-
-            eventList[event].push(callback.bind(this));
+        _checkGesture: function (frame) {
+            var gestures = this._gestures;
+            var _this = this;
+            gestures.forEach(function (gesture) {
+                if (gesture.checkGesture(frame)) {
+                    _this._dispatch(gesture.eventName, frame);
+                }
+            });
         },
 
-        fire: function (event) {
+        _dispatch: function (evt) {
             var eventList = this._registeredEventList;
-            if (eventList.indexOf(event) == -1) return;
+            if (eventList.indexOf(evt) == -1) return;
 
-            eventList[event].forEach(function (callback) {
+            eventList[evt].forEach(function (callback) {
                 callback(toArray(arguments).slice(1));
             });
+        },
+
+        on: function (evt, callback) {
+            var eventList = this._registeredEventList;
+            if (eventList.indexOf(evt) == -1) return;
+
+            eventList[evt].push(callback.bind(this));
+        },
+
+        frameHappened: function (frame) {
+            this._checkGesture(frame);
+        },
+
+        fire: function () {
+            this._dispatch(arguments);
         }
     }
 
