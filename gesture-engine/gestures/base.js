@@ -1,52 +1,73 @@
-var GestureBase = (function () {
-    var gesture = {}
+var GestureBase = {}
+var emptyFn = new Function;
 
-    var IsRecognitionStarted;
-    var CurrentFrameCount;
-    var MaximumNumberOfFrameToProcess = 15;
-    var GestureTimeStamp;
+return Object.defineProperties(GestureBase, {
 
-    var ValidateGestureStartCondition = new Function;
-    var ValidateGestureEndCondition = new Function;
-    /*
-        Will check if the right hand position is between the shoulder and the spine joint. 
-    */
-    var ValidateBaseCondition = new Function;
-    /*
-        Will verify if the hand is moving from the right-toleft direction 
-        and the distance between the right hand joint and the left shoulder is decreasing.
-    */
-    var IsGestureValid = new Function;
+    IsRecognitionStarted: {
+        value: false
+    },
 
-    var CheckForGesture = function (frame) {
+    CurrentFrameCount: {
+        value: 0
+    },
 
-        // Gesture Start:
-        if (IsRecognitionStarted == false) {
+    MaximumNumberOfFrameToProcess: {
+        value: 15
+    },
 
-            if (ValidateGestureStartCondition(frame)) {
-                IsRecognitionStarted = true;
-                CurrentFrameCount = 0;
-            }
+    GestureTimeStamp: {
+        value: +new Date
+    },
 
-        } else {
+    // Gesture Validate Function
+    ValidateGestureStartCondition: {
+        value: emptyFn
+    },
 
-            // Gesture End:
-            if (CurrentFrameCount == MaximumNumberOfFrameToProcess) {
-                IsRecognitionStarted = false;
-                if (ValidateBaseCondition(frame) && ValidateGestureEndCondition(frame)) {
-                    return true;
+    ValidateGestureEndCondition: {
+        value: emptyFn
+    },
+
+    ValidateBaseCondition: {
+        value: emptyFn
+    },
+
+    IsGestureValid: {
+        value: emptyFn
+    },
+    
+    // output gesture API
+    CheckForGesture: {
+
+        value: function (frame) {
+
+            // Gesture Start:
+            if (IsRecognitionStarted == false) {
+
+                if (ValidateGestureStartCondition(frame)) {
+                    IsRecognitionStarted = true;
+                    CurrentFrameCount = 0;
                 }
+
+            } else {
+
+                // Gesture End:
+                if (CurrentFrameCount == MaximumNumberOfFrameToProcess) {
+                    IsRecognitionStarted = false;
+                    if (ValidateBaseCondition(frame) && ValidateGestureEndCondition(frame)) {
+                        return true;
+                    }
+                }
+
+                // Gesture Process
+                CurrentFrameCount++;
+                if (!IsGestureValid(frame) && !ValidateBaseCondition(frame)) {
+                    IsRecognitionStarted = false;
+                }         
             }
 
-            // Gesture Process
-            CurrentFrameCount++;
-            if (!IsGestureValid(frame) && !ValidateBaseCondition(frame)) {
-                IsRecognitionStarted = false;
-            }         
+            return false;
         }
-
-        return false;
     }
 
-    return gesture;
-})();
+});
