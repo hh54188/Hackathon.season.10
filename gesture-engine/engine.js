@@ -16,8 +16,12 @@ var isString = function (str) {
 
 
 define([
+    // Native Gesture:
     "./gestures/native/circle", 
-    "./gestures/native/swipe"], function (circle, swipe) {
+    "./gestures/native/swipe",
+    "./gestures/native/keyTaps",
+    "./gestures/native/screenTaps"], function () {
+
     var gestures = (function GestureValidate(gestures) {
 
         var result = [];
