@@ -1,20 +1,10 @@
-define(function () {
+define(["base"], function (nativeGestureCheck) {
 
+    var gestureName = "circle";
     return {
         checkGesture: function (frame) {
-            var gestures = frame.gestures;
-
-            if (gestures.length) {
-                gestures.forEach(function (gesture) {
-                    if (gesture.type == "circle") {
-                        console.log("CIRCLE DECTECTED");
-                        return true;
-                    }
-                });
-            }
-
-            return false;
+            nativeGestureCheck(frame, gestureName);
         },
-        eventName: "circle"
+        eventName: gestureName
     }
 });
