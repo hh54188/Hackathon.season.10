@@ -71,7 +71,7 @@ define([
 
         _dispatch: function (evt) {
             var eventList = this._registeredEventList;
-            if (eventList.indexOf(evt) == -1) return;
+            if (!eventList[evt]) return;
 
             eventList[evt].forEach(function (callback) {
                 callback(toArray(arguments).slice(1));
@@ -80,7 +80,7 @@ define([
 
         on: function (evt, callback) {
             var eventList = this._registeredEventList;
-            if (eventList.indexOf(evt) == -1) return;
+            if (!eventList[evt]) return;
 
             eventList[evt].push(callback.bind(this));
         },
