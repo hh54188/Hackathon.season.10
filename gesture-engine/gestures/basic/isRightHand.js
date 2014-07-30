@@ -1,4 +1,4 @@
-define(["base"], function (Base) {
+define(['base'], function (Base) {
 
 	return Object.create(Base, {
 
@@ -8,8 +8,8 @@ define(["base"], function (Base) {
 
 		ValidateGestureStartCondition: {
 			value: function (frame) {
-				
+
 			}
-		}		
+		}
 	});
 })

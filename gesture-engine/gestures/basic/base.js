@@ -1,6 +1,8 @@
 define(function () {
 
-    var emptyFn = new Function;
+    var emptyFn = function () {
+        return true;
+    };
 
     var GestureBase = Object.defineProperties({}, {
 
@@ -12,6 +14,8 @@ define(function () {
             value: 0
         },
 
+        // If processed frame number is 0,
+        // then disbale GestureProess validate
         MaximumNumberOfFrameToProcess: {
             value: 15
         },
