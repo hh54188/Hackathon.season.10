@@ -80,19 +80,20 @@ define(function () {
         }
     });
 
+    var Gesture = {
 
-    var GestureBase = {
-        checkForGesture: function (frame) {
-            this.validateProcessStart(frame);
+        start: {
+            successor: this.
         },
-        validateGestureStart: emptyFn,
-        validateGestureMove: emptyFn,
-        validateGestureEnd: emptyFn,
-        validateGestureBasic: emptyFn,
-    };
+        move: {
 
-    var Gesture = function () {
+        },
+        end: {
 
+        },
+        basic: {
+            
+        }
     }
 
     /*
@@ -110,7 +111,7 @@ define(function () {
             validateGestureMove: fn
         });
 
-        
+
      */
 
     return GestureBase;  
