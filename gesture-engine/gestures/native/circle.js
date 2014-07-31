@@ -5,12 +5,11 @@ define(function () {
             var gestures = frame.gestures;
 
             if (gestures.length) {
-                gestures.forEach(function (gesture) {
-                    if (gesture.type == "circle") {
-                        console.log("CIRCLE DECTECTED");
+                for (var i = 0; i < gestures.length; i++) {
+                    if (gestures[i].type == "circle") {
                         return true;
-                    }
-                });
+                    }                    
+                }
             }
 
             return false;

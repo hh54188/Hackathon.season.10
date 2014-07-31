@@ -7,7 +7,6 @@ define(function () {
             if (gestures.length) {
                 gestures.forEach(function (gesture) {
                     if (gesture.type == "swipe") {
-                        console.log("SWIPE DECTECTED");
                         return true;
                     }
                 });
