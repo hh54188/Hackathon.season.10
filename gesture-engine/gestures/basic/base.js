@@ -1,3 +1,45 @@
+/*
+    class IsRightHandGestureClass: GestureBaseClass 
+    {
+        
+        private Process process;
+    
+        void IsRightHandGestureClass (Process process) 
+        {
+            this.process = process;
+        }
+
+        private override Boolean validateGestureStart (DeviceFrame frame) 
+        {
+    
+        }
+
+        private override Boolean validateGestureEnd (DeviceFrame frame) 
+        { 
+
+        }
+
+        pricate override Boolean validateGestureMove (DeviceFrame frame) 
+        {
+    
+        }
+
+        public override Boolean CheckForGesture (DeviceFrame frame) 
+        {
+           return this.process.begin(frame)
+        }
+    }
+
+    class Procedure 
+    {
+    
+    }
+    
+    class Process 
+    {
+        new 
+    }
+ */
 define(function () {
 
     var emptyFn = function () {
@@ -24,6 +66,19 @@ define(function () {
             return this.validate(frame);
         }
     };
+
+    var validateProcessStart = Object.create(ProcedureClass, {
+        successor: {
+            value: null
+        },
+        validate: {
+            value: function () {
+
+            }
+        }
+    })
+
+
 
     // `Object.create(Base)` 可以理解为根据基类`Base`
     // 创建了*子类*的*实例*
@@ -80,21 +135,6 @@ define(function () {
         }
     });
 
-    var Gesture = {
-
-        start: {
-            successor: this.
-        },
-        move: {
-
-        },
-        end: {
-
-        },
-        basic: {
-            
-        }
-    }
 
     /*
     
