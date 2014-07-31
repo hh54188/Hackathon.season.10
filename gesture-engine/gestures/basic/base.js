@@ -37,7 +37,20 @@
     
     class Process 
     {
-        new 
+        private Gesture gesture
+
+        void Process (Gesture gesture) 
+        {
+            this.gesture = gesture;
+        }
+
+        private Procedure ProStart = new Procedire;
+        private Procedure ProMove = new Procedure;
+        private Procedure ProEnd = new Procedure;
+        
+        ProStart.successor = ProMove;
+        ProMove.successor = ProEnd;
+
     }
  */
 define(function () {
