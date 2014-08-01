@@ -30,9 +30,46 @@
         }
     }
 
-    class Procedure 
+    abstract class Procedure 
+    {   
+        private Procedure successor;
+        private Gesture gesture;
+
+        public void Procedure (Procedure successor) 
+        {
+            this.successor = successor;
+        }
+
+        abstract public Bool Validate () {}
+    }
+
+    class ValidateStart: Procedure 
     {
+        private bool IsRecognized
+
+        override public Bool Validate ()
+        {
     
+        }
+    }
+
+    class ValidateMove: Procedure 
+    {
+        private int MaxNumOfFrame;
+        private int FrameCount;
+
+        override public Bool Validate ()
+        {
+    
+        }
+    }
+
+    class ValidateEnd: Procedure
+    {
+        override public Book Validate ()
+        {
+    
+        }
     }
     
     class Process 
@@ -44,12 +81,10 @@
             this.gesture = gesture;
         }
 
-        private Procedure ProStart = new Procedire;
-        private Procedure ProMove = new Procedure;
-        private Procedure ProEnd = new Procedure;
         
-        ProStart.successor = ProMove;
-        ProMove.successor = ProEnd;
+        EndProce = new ValidateEnd;
+        MoveProce = new ValidateMove(EndProce);
+        StartProce = new ValidateStart(MoveProce);
 
     }
  */
@@ -61,8 +96,7 @@ define(function () {
 
     var IsRecognitionStarted = false,
         CurrentFrameCount = 0,
-        MaxNumberOfFrameToProcess = 15,
-        GestureTimeStamp = +new Date;
+        MaxNumberOfFrameToProcess = 15;
 
 
     var ProcedureClass = {
