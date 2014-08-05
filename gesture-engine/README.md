@@ -24,6 +24,7 @@
 
 
 ```
+// 旧版本
 var GestureBase = {
 	isRecognized: false,
 
@@ -94,6 +95,23 @@ var commonValidateWorkflow = function (frame,gesture) {
 var specialValidateWorkflow = function (frame, gesture) {
 	
 }
+// 新版本的Gesture：
+
+var GestureBase = {
+	validateGestureStart: fn,
+	validateGestureEnd: fn,
+	validateGestureMove: fn,
+	validateGestureBasic: fn,
+	validateGestureValidate: fn
+};
+
+这样把`验证的过程`与`手势`分离出来（迪米特法则，最少知道原则）
+
+但是问题又来了，我怎么哪一个手势需要使用哪个流程，手势和验证流程还是需要某一种关联
+
+引擎需要的是一个一个打包的整体
+
+
 ```
 
 ```
