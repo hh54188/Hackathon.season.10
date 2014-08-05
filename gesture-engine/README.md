@@ -85,13 +85,38 @@ var validateStartCondition = Object.create(ValidateProcedure, {
 var validateEndCondition;
 var validateMoveCondition;
 
-var commonValidateWorkflow = function (frame,gesture) {
+define (["ValidateStartCondition", "ValidateMoveCondition", "ValidateEndCondition"], function (procedures) {
 
-	validateStartCondition.succressor = validateMoveCondition;
-	valdiateMoveCondition.successor = validateEndCondition;
+	function CommonValidateWorkflow (frame, gesture) {
 
-	validateStartCondition.validate(frame, gesture);
-}
+		var _gesture;
+
+		Object.defineProperty(this, "gesture", {
+			get: function () {
+				return _gesture;
+			},
+			set: function (gesture) {
+				_gesture = gesture;
+				// TODO: class or interface implement validate
+			}
+		});
+
+		procedures.forEach(function (procedure, index) {
+			if (index == procedures.length - 2) return;
+
+			curProcudere = procedure;
+			nextProcedure = procedures[index + 1];
+
+			curProcedure.successor = nextProcedure;
+		})
+
+		validateStartCondition.validate(frame, gesture);
+	}	
+
+	return CommonValidateWorkflow;
+
+});
+
 
 
 var specialValidateWorkflow = function (frame, gesture) {
