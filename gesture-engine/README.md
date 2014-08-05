@@ -2,6 +2,8 @@
 
 ## 引擎设计详解 / 写给前端人看的如何变面向过程为面向对象
 
+因为还要改成 涉及访问器 `get/set`，所以标题也可以改`Javascript面向过程改造`
+
 如果按照最原始的Kincet书中的引擎设计`/gestures/basic/base_backup.js`
 将以不同的手势为单位，每一个手势中都有独立但都相似的运作流程，这么设计具有以下几个问题：
 
@@ -98,6 +100,7 @@ var specialValidateWorkflow = function (frame, gesture) {
 // 新版本的Gesture：
 
 var GestureBase = {
+	// childrenGestures: [],
 	validateGestureStart: fn,
 	validateGestureEnd: fn,
 	validateGestureMove: fn,
@@ -109,7 +112,7 @@ var GestureBase = {
 
 但是问题又来了，我怎么哪一个手势需要使用哪个流程，手势和验证流程还是需要某一种关联
 
-引擎需要的是一个一个打包的整体
+引擎需要的是一个一个打包的整体，应该采用什么设计模式？
 
 
 ```
