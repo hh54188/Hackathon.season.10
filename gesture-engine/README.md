@@ -24,6 +24,79 @@
 
 
 ```
+var GestureBase = {
+	isRecognized: false,
+
+	validateStartCondition: function () {},
+
+	validateEndCondition: function () {},
+
+	checkGesture: function (frame) {
+
+        if (this.isRecognized == false) {
+
+            if (this.validateStartCondition(frame)) {
+                this.isRecognized = true;
+                this.CurrentFrameCount = 0;
+            }
+        }
+        // TODO
+	}
+}
+
+var SwipeGesture = Object.create(GestureBase, {
+
+	validateStartCondition: function () {} // override
+
+	validateEndCondition: function () {} // override
+
+	checkGesture: function () {} // override
+	/*
+		checkGesture: commonWorkflow	
+	*/
+})
+
+var ValidateProcedure = {
+	successor: null,
+	validate: function () { return true; },
+	next: function (frame) {
+		if (this.successor) {
+			return this.successor.validate(frame)
+		}
+		return false
+	},
+	continue: function (frame) {
+		reutrn this.validate(frame);
+	}
+}
+// `Object.create` 在这里实际上是通过父类直接创建了一个实例，而不是创建子类
+var validateStartCondition = Object.create(ValidateProcedure, {
+	validate: {
+		value: function (frame, gesture) {
+			// Implement detail
+			// TODO
+		}
+	}
+});
+
+var validateEndCondition;
+var validateMoveCondition;
+
+var commonValidateWorkflow = function (frame,gesture) {
+
+	validateStartCondition.succressor = validateMoveCondition;
+	valdiateMoveCondition.successor = validateEndCondition;
+
+	validateStartCondition.validate(frame, gesture);
+}
+
+
+var specialValidateWorkflow = function (frame, gesture) {
+	
+}
+```
+
+```
 var GRE = new GestureRecognitionEngine();
 
 /*
