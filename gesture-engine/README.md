@@ -22,6 +22,39 @@
 
 首先尝试修改原来的代码，首先把验证流程
 
+原版：
+
+```
+var GestureBase = {
+    validateStartCondition: function () {
+
+    },
+    validateEndCondition: function () {
+
+    },
+    checkGesture: function () {
+
+    }
+}
+
+var SwipeGesture = Object.create(GestureBase, {
+    checkGesture: {
+        value: function (frame) {
+
+            this.validateStartCondition(frame);
+        }
+    }
+})
+```
+
+新版：
+
+```
+function Gesture(checkGesture) {
+    
+}
+```
+
 
 ```
 var GRE = new GestureRecognitionEngine();
