@@ -27,7 +27,7 @@ define (function () {
 		return true;
 	}
 	
-	function BaseProcedure (nextProcedure) {
+	function BaseProcedure (gesture, nextProcedure) {
 
 		// 虽然这一部分没有可能被继承
 		// 但仍然展示在这里以供参考
@@ -37,6 +37,9 @@ define (function () {
 
 		// 职责链模式的下一个继承者
 		this.successor = nextProcedure || null;
+
+		// 所需要验证的手势
+		this.gesture = gesture;
 	}
 
 	BaseProcedure.prototype = {
@@ -45,22 +48,20 @@ define (function () {
 		maxFrameNum: 15,
 
 		// 对外检测接口
-		validate: emptyFn
+		validate: emptyFn,
 
 		// 自己执行
-		self: function (frame) {
+		validateSelf: function (frame) {
 
 			if (this.validate(frame)) {
-
 				return true;
 			}
 
 			return false;
-
 		},
 
 		// 传递给下一个继承者
-		next: function (frame) {
+		validateNext: function (frame) {
 
 			var successor = this.successor;
 
