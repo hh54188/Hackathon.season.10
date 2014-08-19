@@ -77,5 +77,5 @@ define (function () {
 		}
 	}
 
-	return BaseProcedure;
+	return BaseProcedure.prototype;
 })
