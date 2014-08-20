@@ -1,4 +1,4 @@
-define(["base"], function (BaseProcedure) {
+define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
 
     function CommonEndProcedure (gesture, nextProcedure) {
 

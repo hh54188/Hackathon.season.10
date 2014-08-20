@@ -1,4 +1,4 @@
-define(["../validateFlow/commonFlow"], function (CommonFlow) {
+define(["validateFlow/CommonFlow"], function (CommonFlow) {
 
     function emptyFn () {
         return true;
@@ -6,7 +6,7 @@ define(["../validateFlow/commonFlow"], function (CommonFlow) {
 
     function BaseGesture () {
 
-        this.validateFlow = new CommonFlowd(this);
+        this.validateFlow = new CommonFlow(this);
     }
 
     BaseGesture.prototype = {
@@ -18,7 +18,7 @@ define(["../validateFlow/commonFlow"], function (CommonFlow) {
         validateGestureEnd: emptyFn,
 
         // 检测手势在移动过程中是否正确
-        validateGestureOnMove emptyFn,
+        validateGestureOnMove: emptyFn,
 
         // 检测手势是否保持基础状态
         validateGestureBasicCondition: emptyFn

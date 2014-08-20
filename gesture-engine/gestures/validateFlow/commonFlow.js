@@ -1,7 +1,7 @@
-define (["base", 
-		"../validateProcedure/CommonStartProcedure", 
-		"../valdiateProcedure/CommonMoveProcedure",
-		"../valdiateProcedure/CommonEndProcedure"], 
+define (["validateFlow/BaseFlow",
+		"validateProcedure/CommonStartProcedure", 
+		"validateProcedure/CommonMoveProcedure",
+		"validateProcedure/CommonEndProcedure"], 
 		function (BaseFlow, StartProcedure, MoveProcedure, EndProcedure) {
 
 	function CommonFlow (gesture) {
@@ -10,9 +10,8 @@ define (["base",
 		var moveProcedure = new MoveProcedure(gesture, endProcedure);
 		var startProcedure = new StartProcedure(gesture, moveProcedure);
 
-		// Define custom validate API method
-		this.validte = function (frame) {
 
+		this.validte = function (frame) {
 			return startProcedure.validate(frame);
 		}
 	}
