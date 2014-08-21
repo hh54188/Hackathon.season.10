@@ -5,11 +5,12 @@ define(["validateFlow/CommonFlow"], function (CommonFlow) {
     }
 
     function BaseGesture () {
-
-        this.validateFlow = new CommonFlow(this);
+        
     }
 
     BaseGesture.prototype = {
+
+        ValidateFlowConstructor: CommonFlow,
 
         // 检测手势是否识别开始 
         validateGestureStart: emptyFn,
@@ -21,7 +22,11 @@ define(["validateFlow/CommonFlow"], function (CommonFlow) {
         validateGestureOnMove: emptyFn,
 
         // 检测手势是否保持基础状态
-        validateGestureBasicCondition: emptyFn
+        validateGestureBasicCondition: emptyFn,
+
+        validate: function (frame) {
+            return this.validateFlow.validate(frame);
+        }
     }
 
     return  BaseGesture;

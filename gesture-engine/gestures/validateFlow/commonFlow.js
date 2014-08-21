@@ -11,7 +11,7 @@ define (["validateFlow/BaseFlow",
 		var startProcedure = new StartProcedure(gesture, moveProcedure);
 
 
-		this.validte = function (frame) {
+		this.validate = function (frame) {
 			return startProcedure.validate(frame);
 		}
 	}
