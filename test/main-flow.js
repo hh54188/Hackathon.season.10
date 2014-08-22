@@ -56,9 +56,9 @@ require(["BaseGesture"], function (BaseGesture) {
 			value: function (frame) {
 
 				if (frame % 2 != 0) {
-					return false;
+					return true;
 				}
-				return true;
+				return false;
 			}
 		},
 
