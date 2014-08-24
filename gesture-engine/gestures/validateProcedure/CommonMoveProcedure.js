@@ -21,18 +21,12 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
 
                 this.frameCount--;
                 var gesture = this.gesture;
+                var validateResult;
 
-                // 手势验证不通过
-                if (!gesture.validateGestureOnMove(frame) 
-                        || !gesture.validateGestureBasicCondition(frame)) {
-
-                    this.resetFrameCount();
-                    return false;
-                }
-
+                // 验证最后一帧
                 if (!this.frameCount) {
 
-                    var nextResult = this.validateNext(frame);
+                    nextResult = this.validateNext(frame);
                     if (nextResult) {
                         return true;
                     } else {
@@ -41,11 +35,14 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
 
                 } else {
 
-                    var selfResult = this.validateSelf(frame);
-                    if (selfResult) {
-                        return true;
+                    nextResult = gesture.validateGestureOnMove(frame) && 
+                                    gesture.validateGestureBasicCondition(frame);
+                    // 验证失败
+                    if (!nextResult) {
+                        this.resetFrameCount();
+                        return false;                        
                     } else {
-                        return false;
+                        return true;
                     }
                 }
             }
