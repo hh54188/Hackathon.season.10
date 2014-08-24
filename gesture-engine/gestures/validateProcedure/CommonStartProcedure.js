@@ -25,10 +25,12 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
 
                         // 如果验证通过并且只有一帧，手势识别成功
                         if (!this.frameCount) {
+                            this.frameCount = this.maxFrameNum;
                             return true;
                         }
                         return false;
                     } else {
+                        console.log("START PROCEDURE FAILED", frame);
                         this.frameCount = this.maxFrameNum;
                         return false;
                     }
@@ -40,6 +42,8 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
                 // 如果下一个环节执行结果为true，并且倒计时完毕
                 // 则手势验证完毕
                 if (nextResult && !this.frameCount) {
+
+                    this.frameCount = this.maxFrameNum;
                     return true;
 
                 // 如果下一个执行结果为true，则继续倒计时

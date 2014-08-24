@@ -24,6 +24,9 @@ define(["validateFlow/CommonFlow"], function (CommonFlow) {
         // 检测手势是否保持基础状态
         validateGestureBasicCondition: emptyFn,
 
+        // 重置
+        reset: emptyFn,
+
         validate: function (frame) {
             return this.validateFlow.validate(frame);
         }

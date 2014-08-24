@@ -97,17 +97,85 @@ require(["BaseGesture"], function (BaseGesture) {
 				}
 				return false;
 			}
+		},
+
+		reset: {
+			value: function () {
+				this.lastFrame = 0;
+			}
 		}
 	});
 
 	var testGesture = new TestGesture;
 
-	// 测试在初始阶段挂掉
-	var casePassed = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+	// 通过
+	// console.log("------PASSED CASE START------");
 
-	casePassed.forEach(function (frame) {
-		var result = testGesture.validate(frame);
-		console.log(result);
-	});
+	// var casePassed1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+	// casePassed1.forEach(function (frame) {
+	// 	var result = testGesture.validate(frame);
+	// 	console.log(result);
+	// });
 
+	// console.log("------PASSED CASE END------");
+
+
+
+
+	// 2. 挂在初始验证阶段：[2]
+	// 不通过
+	// console.log("------FAILED CASE START: failed at start valdiate procedure------");
+
+	// var casePassed2 = [2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+	// casePassed2.forEach(function (frame) {
+	// 	var result = testGesture.validate(frame);
+	// 	console.log(result);
+	// });
+
+	// console.log("------FAILED CASE END------");
+
+
+
+
+	// 3. 挂在移动阶段：[1, 5, 4]
+	// 不通过
+	// console.log("------FAILED CASE START: failed at move valdiate procedure------");
+
+	// var casePassed3 = [1, 5, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+	// casePassed3.forEach(function (frame) {
+	// 	var result = testGesture.validate(frame);
+	// 	console.log(result);
+	// });
+
+	// console.log("------FAILED CASE END------");
+
+
+
+	
+	// 4. 挂在基本识别：[1, 101]
+	// 不通过
+	// console.log("------FAILED CASE START: failed at basic valdiate procedure------");
+
+	// var casePassed4 = [1, 101, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];	
+	// casePassed4.forEach(function (frame) {
+	// 	var result = testGesture.validate(frame);
+	// 	console.log(result);
+	// });
+
+	// console.log("------FAILED CASE END------");
+
+
+
+
+	// 5. 挂在结束验证：[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+	// 不通过
+	// console.log("------FAILED CASE START: failed at end valdiate procedure------");	
+
+	// var casePassed5 = [1, 2, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+	// casePassed5.forEach(function (frame) {
+	// 	var result = testGesture.validate(frame);
+	// 	console.log(result);
+	// });
+
+	// console.log("------FAILED CASE END------");
 });

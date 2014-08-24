@@ -39,6 +39,7 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
                                     gesture.validateGestureBasicCondition(frame);
                     // 验证失败
                     if (!nextResult) {
+                        console.log("MOVE PROCEDURE FAILED", frame);
                         this.resetFrameCount();
                         return false;                        
                     } else {

@@ -17,6 +17,7 @@ define(["validateProcedure/BaseProcedure"], function (BaseProcedure) {
                     return true;    
                 }
 
+                console.log("END PROCEDURE FAILED", frame);
                 return false;
             }
         }
