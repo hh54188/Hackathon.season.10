@@ -108,6 +108,55 @@ require(["BaseGesture"], function (BaseGesture) {
 
 	var testGesture = new TestGesture;
 
+	var frames = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17];
+
+	function validate (frames) {
+
+	    // 指针
+	    var delta = 15,
+	        head = 0,
+	        tail = head + delta - 1;
+
+	    var hitted = [];
+
+	    while (tail <= frames.length - 1) {
+
+	    	for (var i = head; i <= tail; i++) {
+
+	    		if (i == head) {
+	    			if (testGesture.validateGestureStart(frames[i])) {
+	    				continue;
+	    			} else {
+	    				console.log("START FAILED");
+	    				break;
+	    			}
+	    		} else if (i > head && i < tail) {
+	    			if (testGesture.validateGestureOnMove(frames[i]) && 
+	    				testGesture.validateGestureBasicCondition(frames[i])) {
+	    				continue;
+	    			} else {
+	    				console.log("MOVE FAILED");
+	    				break;
+	    			}
+	    		} else if (i == tail) {
+	    			if (testGesture.validateGestureEnd(frames[i])) {
+	    				hitted.push(i + ":" + frames[i]);
+	    				continue;
+	    			} else {
+	    				console.log("END FAILED");
+	    				break;
+	    			}	    			
+	    		}
+	    	}
+
+	    	head++, tail++;
+	    }
+
+	    return hitted;
+	}
+
+	console.log(validate(frames));
+
 	// 通过
 	// console.log("------PASSED CASE START------");
 
