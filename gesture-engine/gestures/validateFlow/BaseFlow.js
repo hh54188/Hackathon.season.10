@@ -7,7 +7,8 @@ define(function () {
 	}
 
 	BaseFlow.prototype = {
-		validate: emptyFn
+		validate: emptyFn,
+		reset: emptyFn
 	}
 	
 	return BaseFlow;

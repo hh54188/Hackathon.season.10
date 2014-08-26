@@ -1,8 +1,5 @@
 requirejs.config({
-    baseUrl: '../gesture-engine/gestures',
-    paths: {
-        BaseGesture: 'basic/BaseGesture'
-    }
+    baseUrl: '../gesture-engine/gestures'
 });
 
 
@@ -41,76 +38,11 @@ requirejs.config({
 
  */
 
-require(["BaseGesture"], function (BaseGesture) {
-
-	// 定义测试手势
-	var TestGesture = function () {
-
-		this.validateFlow = new this.ValidateFlowConstructor(this);
-	};
-
-	TestGesture.prototype = Object.create(new BaseGesture, {
-
-		// 成功条件：frame为奇数
-		validateGestureStart: {
-			value: function (frame) {
-
-				if (frame % 2 != 0) {
-					return true;
-				}
-				return false;
-			}
-		},
-
-		// 成功条件：frame为偶数
-		validateGestureEnd: {
-			value: function (frame) {
-
-				if (frame % 2 == 0) {
-					return true;
-				}
-				return false;
-			}
-		},
-
-		// 成功条件：逐渐递增
-		validateGestureOnMove: {
-			value: function (frame) {
-
-				this.lastFrame = this.lastFrame || 0;
-
-				if (frame > this.lastFrame) {
-					this.lastFrame = frame;
-					return true;
-				}
-
-				this.lastFrame = frame;
-				return false;
-			}
-		},
-
-		// 成功条件：在1至100之间（包括等于100）
-		validateGestureBasicCondition: {
-			value: function (frame) {
-				if (frame >= 1 && frame <= 100) {
-					return true;
-				}
-				return false;
-			}
-		},
-
-		reset: {
-			value: function () {
-				this.lastFrame = 0;
-			}
-		}
-	});
+require(["custom/TestGesture"], function (TestGesture) {
 
 	var testGesture = new TestGesture;
 
-	var frames = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,17];
-
-	function validate (frames) {
+	function testValidate (frames) {
 
 	    // 指针
 	    var delta = 15,
@@ -127,7 +59,6 @@ require(["BaseGesture"], function (BaseGesture) {
 	    			if (testGesture.validateGestureStart(frames[i])) {
 	    				continue;
 	    			} else {
-	    				console.log("START FAILED");
 	    				break;
 	    			}
 	    		} else if (i > head && i < tail) {
@@ -135,7 +66,6 @@ require(["BaseGesture"], function (BaseGesture) {
 	    				testGesture.validateGestureBasicCondition(frames[i])) {
 	    				continue;
 	    			} else {
-	    				console.log("MOVE FAILED");
 	    				break;
 	    			}
 	    		} else if (i == tail) {
@@ -143,7 +73,6 @@ require(["BaseGesture"], function (BaseGesture) {
 	    				hitted.push(i + ":" + frames[i]);
 	    				continue;
 	    			} else {
-	    				console.log("END FAILED");
 	    				break;
 	    			}	    			
 	    		}
@@ -155,18 +84,27 @@ require(["BaseGesture"], function (BaseGesture) {
 	    return hitted;
 	}
 
-	console.log(validate(frames));
+	function assert () {
+		
+	}
 
-	// 通过
-	// console.log("------PASSED CASE START------");
 
-	// var casePassed1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
-	// casePassed1.forEach(function (frame) {
-	// 	var result = testGesture.validate(frame);
-	// 	console.log(result);
-	// });
+	(function () {
 
-	// console.log("------PASSED CASE END------");
+		var testFrames = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+		var result = [];
+
+		testFrames.forEach(function (frame, index) {
+
+			if (testGesture.validate(frame)) {
+				result.push(index + ":" + frame);
+			}
+		});
+
+		console.log(result.join(""));
+		console.log(validate(testFrames).join(""));
+
+	})();
 
 
 
