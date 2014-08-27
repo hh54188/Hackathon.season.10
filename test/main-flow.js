@@ -42,7 +42,7 @@ require(["custom/TestGesture"], function (TestGesture) {
 
 	var testGesture = new TestGesture;
 
-	function testValidate (frames) {
+	function validateTestFrame (frames) {
 
 	    // 指针
 	    var delta = 15,
@@ -84,85 +84,49 @@ require(["custom/TestGesture"], function (TestGesture) {
 	    return hitted;
 	}
 
-	function assert () {
+	function assert (actual, expected, message) {
 		
+		if (actual == expected) {
+			console.log("SUCCESS:", message);
+		} else {
+			console.error("FAILED:", message);
+		}
 	}
 
-
-	(function () {
-
-		var testFrames = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
-		var result = [];
-
-		testFrames.forEach(function (frame, index) {
-
-			if (testGesture.validate(frame)) {
-				result.push(index + ":" + frame);
-			}
-		});
-
-		console.log(result.join(""));
-		console.log(validate(testFrames).join(""));
-
-	})();
+	var testCases = [
+		// {
+		// 	frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
+		// 	description: "Gesture recognized"
+		// },
+		// {
+		// 	frames: [2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19],
+		// 	description: "Failed at frist two frame"
+		// },
+		{
+			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17]
+					.concat([19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36]),
+			description: "Failed at last frame"
+		}
+	];
 
 
+	testCases.forEach(function (testCase) {
 
+		(function (frames, description) {
+			debugger
+			var result = [];
+			frames.forEach(function (frame, index) {
+				if (testGesture.validate(frame)) {
+					result.push(index + ":" + frame);
+				}
+			});
+			var foo = validateTestFrame(frames);
+			var bar = result;
+			debugger
+			assert(validateTestFrame(frames).join(""), result.join(""), description);
 
-	// 2. 挂在初始验证阶段：[2]
-	// 不通过
-	// console.log("------FAILED CASE START: failed at start valdiate procedure------");
+		})(testCase.frames, testCase.description);
 
-	// var casePassed2 = [2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
-	// casePassed2.forEach(function (frame) {
-	// 	var result = testGesture.validate(frame);
-	// 	console.log(result);
-	// });
+	});
 
-	// console.log("------FAILED CASE END------");
-
-
-
-
-	// 3. 挂在移动阶段：[1, 5, 4]
-	// 不通过
-	// console.log("------FAILED CASE START: failed at move valdiate procedure------");
-
-	// var casePassed3 = [1, 5, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
-	// casePassed3.forEach(function (frame) {
-	// 	var result = testGesture.validate(frame);
-	// 	console.log(result);
-	// });
-
-	// console.log("------FAILED CASE END------");
-
-
-
-	
-	// 4. 挂在基本识别：[1, 101]
-	// 不通过
-	// console.log("------FAILED CASE START: failed at basic valdiate procedure------");
-
-	// var casePassed4 = [1, 101, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];	
-	// casePassed4.forEach(function (frame) {
-	// 	var result = testGesture.validate(frame);
-	// 	console.log(result);
-	// });
-
-	// console.log("------FAILED CASE END------");
-
-
-
-
-	// 5. 挂在结束验证：[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-	// 不通过
-	// console.log("------FAILED CASE START: failed at end valdiate procedure------");	
-
-	// var casePassed5 = [1, 2, 4, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-	// casePassed5.forEach(function (frame) {
-	// 	var result = testGesture.validate(frame);
-	// 	console.log(result);
-	// });
-
-	// console.log("------FAILED CASE END------");
 });
