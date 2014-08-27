@@ -1,8 +1,3 @@
-requirejs.config({
-    baseUrl: '../gesture-engine/gestures'
-});
-
-
 /*
 	
 	测试思路：
@@ -11,7 +6,7 @@ requirejs.config({
 	1. 手势通过
 	2. 挂在初始验证
 	3. 挂在移动验证
-		4. 挂在基本手势
+	4. 挂在基本手势
 	5. 挂在结束验证
 
 	需要5个数组，每个数组15个长度的帧
@@ -36,25 +31,52 @@ requirejs.config({
 	4. 挂在基本识别：[1, 101]
 	5. 挂在结束验证：[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
- */
+*/
+
+requirejs.config({
+    baseUrl: '../gesture-engine/gestures'
+});
+
 
 require(["custom/TestGesture"], function (TestGesture) {
 
-	var testGesture = new TestGesture;
-
 	function validateTestFrame (frames) {
 
+		var testGesture = new TestGesture;
+
 	    // 指针
-	    var delta = 15,
-	        head = 0,
-	        tail = head + 1;
+	    var maxFrame = 15;
 
 	    var hitted = [];
-	    var count = delta;
+	    var count = 0;
 
-	    frames.forEach(function (frame) {
-	    	frame.vali
-	    });
+	    for (var i = 0; i < frames.length; i++) {
+
+	    	var frame = frames[i];
+    		count++;
+
+			if (count == 1) {
+
+    			if (!testGesture.validateGestureStart(frame)) {
+	    			count = 0;
+	    		}
+
+	    	} else if (count > 1 && count < maxFrame) {
+
+    			if (!testGesture.validateGestureOnMove(frame) || 
+    				!testGesture.validateGestureBasicCondition(frame)) {
+    				count = 0;
+    			}
+
+	    	} else if (count == maxFrame) {
+
+	    		if (testGesture.validateGestureEnd(frame)) {
+	    			hitted.push(i + ":" + frames[i]);
+	    		} else {
+	    			count = 0;
+	    		}
+    		}	    	
+	    }
 
 	    return hitted;
 	}
@@ -81,6 +103,14 @@ require(["custom/TestGesture"], function (TestGesture) {
 			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 					.concat([19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36]),
 			description: "Failed at last frame"
+		},
+		{
+			frames: [1, 2, 3, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
+			description: "Failed at move condition"
+		},
+		{
+			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 10001, 10002],
+			description: "Failed at basic condition"
 		}
 	];
 
@@ -90,15 +120,18 @@ require(["custom/TestGesture"], function (TestGesture) {
 		(function (frames, description) {
 
 			var result = [];
+			var testGesture = new TestGesture;
+
 			frames.forEach(function (frame, index) {
 				if (testGesture.validate(frame)) {
 					result.push(index + ":" + frame);
 				}
 			});
-			var foo = validateTestFrame(frames);
-			var bar = result;
-			debugger
-			assert(validateTestFrame(frames).join(""), result.join(""), description);
+
+			var expected = validateTestFrame(frames);
+			var actual = result;
+
+			assert(expected.join(""), actual.join(""), description);
 
 		})(testCase.frames, testCase.description);
 
