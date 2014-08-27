@@ -47,39 +47,14 @@ require(["custom/TestGesture"], function (TestGesture) {
 	    // 指针
 	    var delta = 15,
 	        head = 0,
-	        tail = head + delta - 1;
+	        tail = head + 1;
 
 	    var hitted = [];
+	    var count = delta;
 
-	    while (tail <= frames.length - 1) {
-
-	    	for (var i = head; i <= tail; i++) {
-
-	    		if (i == head) {
-	    			if (testGesture.validateGestureStart(frames[i])) {
-	    				continue;
-	    			} else {
-	    				break;
-	    			}
-	    		} else if (i > head && i < tail) {
-	    			if (testGesture.validateGestureOnMove(frames[i]) && 
-	    				testGesture.validateGestureBasicCondition(frames[i])) {
-	    				continue;
-	    			} else {
-	    				break;
-	    			}
-	    		} else if (i == tail) {
-	    			if (testGesture.validateGestureEnd(frames[i])) {
-	    				hitted.push(i + ":" + frames[i]);
-	    				continue;
-	    			} else {
-	    				break;
-	    			}	    			
-	    		}
-	    	}
-
-	    	head++, tail++;
-	    }
+	    frames.forEach(function (frame) {
+	    	frame.vali
+	    });
 
 	    return hitted;
 	}
@@ -94,16 +69,16 @@ require(["custom/TestGesture"], function (TestGesture) {
 	}
 
 	var testCases = [
-		// {
-		// 	frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
-		// 	description: "Gesture recognized"
-		// },
-		// {
-		// 	frames: [2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19],
-		// 	description: "Failed at frist two frame"
-		// },
 		{
-			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17]
+			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
+			description: "Gesture recognized"
+		},
+		{
+			frames: [2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19],
+			description: "Failed at frist two frame"
+		},
+		{
+			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 					.concat([19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36]),
 			description: "Failed at last frame"
 		}
@@ -113,7 +88,7 @@ require(["custom/TestGesture"], function (TestGesture) {
 	testCases.forEach(function (testCase) {
 
 		(function (frames, description) {
-			debugger
+
 			var result = [];
 			frames.forEach(function (frame, index) {
 				if (testGesture.validate(frame)) {
