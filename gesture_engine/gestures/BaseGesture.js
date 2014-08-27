@@ -1,4 +1,4 @@
-define(["validateFlow/CommonFlow"], function (CommonFlow) {
+define(["validate_flow/CommonFlow"], function (CommonFlow) {
 
     function emptyFn () {
         return true;

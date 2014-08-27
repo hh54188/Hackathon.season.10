@@ -1,4 +1,6 @@
-define(["BaseGesture"], function (BaseGesture) {
+define([
+	"gestures/BaseGesture", 
+	"validate_flow/CommonFlow"], function (BaseGesture, CommonFlow) {
 
 	// 定义测试手势
 	function TestGesture() {
@@ -6,7 +8,11 @@ define(["BaseGesture"], function (BaseGesture) {
 		this.validateFlow = new this.ValidateFlowConstructor(this);
 	};
 
-	TestGesture.prototype = Object.create(new BaseGesture, {
+	TestGesture.prototype = Object.create(BaseGesture.prototype, {
+
+		ValidateFlowConstructor: {
+			value: CommonFlow
+		},
 
 		// 成功条件：frame为奇数
 		validateGestureStart: {

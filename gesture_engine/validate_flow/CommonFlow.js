@@ -1,4 +1,4 @@
-define (["validateFlow/BaseFlow"], function (BaseFlow) {
+define (["validate_flow/BaseFlow"], function (BaseFlow) {
 
 	function CommonFlow (gesture) {
 

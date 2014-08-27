@@ -16,22 +16,22 @@ var isString = function (str) {
 
 
 define([
-    // Native Gesture:
-    "./gestures/native/circle", 
-    "./gestures/native/swipe",
-    "./gestures/native/keyTaps",
-    "./gestures/native/screenTaps"], function () {
+    "gestures/native/CircleGesture", 
+    "gestures/native/SwipeGesture",
+    "gestures/native/KeyTapsGesture",
+    "gestures/native/ScreenTapsGesture"], function () {
 
     var gestures = (function GestureValidate(gestures) {
 
-        var result = [];
-        toArray(gestures).forEach(function (gesture) {
-            // Duck type check
-            if (isFunction(gesture.checkGesture) && isString(gesture.eventName)) {
-                result.push(gesture);
-            }
-        });
+        var result = {};
+        var matchName = /(\w+)Gesture/;
 
+        toArray(gestures).forEach(function (Gesture) {
+
+            var gestureName = Gesture.name.match(matchName)[1];
+            result[gestureName] = new Gesture;
+        });
+        debugger
         return result;
     })(arguments);
 
@@ -52,21 +52,24 @@ define([
             var gestures = this._gestures;
             var eventList = this._registeredEventList;
 
-            gestures.forEach(function (gesture) {
-                eventList[gesture.eventName] = [];
-            });
+            for (var name in gestures) {
+                eventList[name] = [];
+            };
 
             this._gestureCount = eventList.length;
         },
 
         _checkGesture: function (frame) {
-            var gestures = this._gestures;
+            var gestures = this._gestures,
+                gesture;
             var _this = this;
-            gestures.forEach(function (gesture) {
-                if (gesture.checkGesture(frame)) {
-                    _this._dispatch(gesture.eventName, frame);
-                }
-            });
+
+            for (var name in gestures) {
+                gesture = gestures[name];
+                if (gesture.validate(frame)) {
+                    _this._dispatch(name, frame);
+                }                
+            }
         },
 
         _dispatch: function (evt) {
