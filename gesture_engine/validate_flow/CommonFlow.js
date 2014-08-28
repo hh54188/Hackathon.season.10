@@ -6,6 +6,7 @@ define (["validate_flow/BaseFlow"], function (BaseFlow) {
 
 		this.gesture = gesture;
 		this.currentFrameCount = 0;
+		this.frameQueue = [];
 
 		this.isRecognitionStarted = false;
 	}
@@ -16,6 +17,7 @@ define (["validate_flow/BaseFlow"], function (BaseFlow) {
 			value: function () {
 
 				this.isRecognitionStarted = false;
+				this.frameQueue.length = 0;
 				this.gesture.reset();
 			}
 		},
@@ -24,6 +26,7 @@ define (["validate_flow/BaseFlow"], function (BaseFlow) {
 			value: function (frame) {
 				
 				var gesture = this.gesture;
+				this.frameQueue.push(frame);
 
 				if (!this.isRecognitionStarted) {
 
