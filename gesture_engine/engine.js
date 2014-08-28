@@ -70,10 +70,15 @@ define([], function () {
             var _this = this;
 
             for (var type in gestures) {
-                gesture = gestures[type];
-                if (gesture.validate(frame)) {
+
+                if (nativeGestureTyps.indexOf(type) > -1) {
                     _this._dispatch(type, frame);
-                }                
+                } else {
+                    gesture = gestures[type];
+                    if (gesture.validate(frame)) {
+                        _this._dispatch(type, frame);
+                    }                       
+                }
             }
         },
 

@@ -13,6 +13,10 @@ require(["engine"], function (Engine) {
 
     controller.on("connect", function () {
         engine = new Engine;
+        debugger
+        engine.on("circle", function (gestureType, frame) {
+            // console.log(gestureType, frame);
+        });
     });
 
     controller.on("gesture", function (gesture, frame) {
