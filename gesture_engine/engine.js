@@ -72,7 +72,7 @@ define([], function () {
             for (var type in gestures) {
 
                 if (nativeGestureTyps.indexOf(type) > -1) {
-                    _this._dispatch(type, frame);
+                    return;
                 } else {
                     gesture = gestures[type];
                     if (gesture.validate(frame)) {
@@ -84,10 +84,10 @@ define([], function () {
 
         _dispatch: function (gestureType, frame) {
             var eventList = this._registeredEventList;
-            if (!eventList[gestureType]) return;
+            if (!eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {
-                callback(toArray(arguments).slice(1));
+                callback(gestureType, frame);
             });
         },
 

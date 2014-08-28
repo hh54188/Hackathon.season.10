@@ -12,10 +12,10 @@ require(["engine"], function (Engine) {
     var engine;
 
     controller.on("connect", function () {
+
         engine = new Engine;
-        debugger
-        engine.on("circle", function (gestureType, frame) {
-            // console.log(gestureType, frame);
+        engine.on("swipe", function (gestureType, frame) {
+            console.log(gestureType, frame);
         });
     });
 
