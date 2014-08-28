@@ -1,10 +1,10 @@
 requirejs.config({
-    baseUrl: '../gesture_engine/'
+    baseUrl: '../../gesture_engine/'
 });
 
 
 require(["engine"], function (Engine) {
-	debugger
+
     var controller = new Leap.Controller({
          enableGestures: true
     });
@@ -15,9 +15,25 @@ require(["engine"], function (Engine) {
         engine = new Engine;
     });
 
+    controller.on("gesture", function (gesture, frame) {
+        engine.gestureHappened(gesture.type, frame);
+    });
+
     controller.on("frame", function (frame) {
         engine.frameHappened(frame);
     });
+
+
+
+    controller.on("disconnect", function () {
+        console.error("disconnect");
+    });
+
+    controller.on("deviceDisconnected", function () {
+        console.error("deviceDisconnected");
+    });
+
+
 
     controller.connect();
 })

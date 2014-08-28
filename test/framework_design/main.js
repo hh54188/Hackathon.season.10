@@ -32,7 +32,7 @@
 */
 
 requirejs.config({
-    baseUrl: '../gesture_engine/'
+    baseUrl: '../../gesture_engine/'
 });
 
 
