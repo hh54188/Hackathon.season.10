@@ -1,6 +1,6 @@
 define (function () {
-	if (!$) {
-		console.error("$ expected!");
+	if (!window.$) {
+		console.log("$ expected!");
 		return false;	
 	} 
 

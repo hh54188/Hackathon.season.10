@@ -1,15 +1,11 @@
-requirejs.config({
-    baseUrl: './gesture_engine/'
-});
+require(["engine", "../apis/image", "leap"], function (Engine, ImgAPI, LeapMotionDoesnotWork) {
 
-
-require(["engine",
-        "../apis/image"], function (Engine, ImgAPI) {
-
+    // leap.js 不兼容AMD格式，加载依赖但无导出接口
+    // 所以直接只用leap.js定义的全局变量
     var controller = new Leap.Controller({
          enableGestures: true
     });
-    
+
     var engine;
 
     controller.on("connect", function () {
