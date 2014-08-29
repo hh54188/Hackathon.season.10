@@ -56,6 +56,8 @@ require(["gestures/TestGesture"], function (TestGesture) {
 			if (count == 1) {
 
     			if (!testGesture.validateGestureStart(frame)) {
+
+    				testGesture.reset();
 	    			count = 0;
 	    		}
 
@@ -63,6 +65,8 @@ require(["gestures/TestGesture"], function (TestGesture) {
 
     			if (!testGesture.validateGestureOnMove(frame) || 
     				!testGesture.validateGestureBasicCondition(frame)) {
+
+    				testGesture.reset();
     				count = 0;
     			}
 
@@ -71,6 +75,8 @@ require(["gestures/TestGesture"], function (TestGesture) {
 	    		if (testGesture.validateGestureEnd(frame)) {
 	    			hitted.push(i + ":" + frames[i]);
 	    		} else {
+	    			
+	    			testGesture.reset();
 	    			count = 0;
 	    		}
     		}	    	
@@ -103,11 +109,13 @@ require(["gestures/TestGesture"], function (TestGesture) {
 			description: "Failed at last frame"
 		},
 		{
-			frames: [1, 2, 3, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16],
+			frames: [1, 2, 3, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16]
+					.concat([17, 18, 19, 20]),
 			description: "Failed at move condition"
 		},
 		{
-			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 10001, 10002],
+			frames: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 10001, 10002]
+					.concat([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16]),
 			description: "Failed at basic condition"
 		}
 	];
@@ -119,9 +127,11 @@ require(["gestures/TestGesture"], function (TestGesture) {
 
 			var result = [];
 			var testGesture = new TestGesture;
+			var frameVaidateResult;
 
 			frames.forEach(function (frame, index) {
-				if (testGesture.validate(frame)) {
+				frameVaidateResult = testGesture.validate(frame);
+				if (frameVaidateResult) {
 					result.push(index + ":" + frame);
 				}
 			});

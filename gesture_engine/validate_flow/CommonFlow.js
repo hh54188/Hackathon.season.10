@@ -1,5 +1,14 @@
 define (["validate_flow/BaseFlow"], function (BaseFlow) {
 
+	function cloneArray (frames) {
+		var result = [];
+		frames.forEach(function (frame) {
+			result.push(frame);
+		});
+
+		return result;
+	}
+
 	function CommonFlow (gesture) {
 
 		this.MAX_FRAME_NUM = 15;
@@ -33,6 +42,8 @@ define (["validate_flow/BaseFlow"], function (BaseFlow) {
 					if (gesture.validateGestureStart(frame)) {
 						this.isRecognitionStarted = true;
 						this.currentFrameCount = 1;
+					} else {
+						this.reset();
 					}
 
 				} else {
@@ -40,9 +51,12 @@ define (["validate_flow/BaseFlow"], function (BaseFlow) {
 					this.currentFrameCount++;
 
 					if (this.currentFrameCount == this.MAX_FRAME_NUM) {
+
+						var frameData = cloneArray(this.frameQueue);
 						this.reset();
+
 						if (gesture.validateGestureEnd(frame)) {
-							return true;
+							return frameData;
 						}
 					}
 
