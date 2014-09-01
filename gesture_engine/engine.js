@@ -17,7 +17,7 @@ var isString = function (str) {
 
 define([], function () {
 
-    var nativeGestureTyps = ["circle", "keyTap", "screenTap", "swipe"];
+    var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];
 
     var gestures = (function GestureValidate(gestures) {
 
@@ -32,7 +32,7 @@ define([], function () {
         });
         
         // Handle native gestures:
-        nativeGestureTyps.forEach(function (gestureType) {
+        nativeGestureTypes.forEach(function (gestureType) {
             result[gestureType] = new Function;
         });    
 
@@ -64,30 +64,43 @@ define([], function () {
             this._gestureCount = eventList.length;
         },
 
+        _assembleInfo: function (gestureType, gestureFrames) {
+            return {
+                type: gestureType,
+                isNative: false,
+                data: gestureFrames
+            }
+        },
+
         _checkGesture: function (frame) {
             var gestures = this._gestures,
                 gesture;
             var _this = this;
 
-            for (var type in gestures) {
+            for (var gestureType in gestures) {
 
-                if (nativeGestureTyps.indexOf(type) > -1) {
+                if (nativeGestureTypes.indexOf(gestureType) > -1) {
                     return;
                 } else {
-                    gesture = gestures[type];
-                    if (gesture.validate(frame)) {
-                        _this._dispatch(type, frame);
+                    gesture = gestures[gestureType];
+                    var gestureFrames = gesture.validate(frame);
+
+                    if (gestureFrames && gestureFrames.length != 0) {
+                        var gestureInfo = _this._assembleInfo(gestureType, gestureFrames);
+                        _this._dispatch(gestureInfo);
                     }                       
                 }
             }
         },
 
-        _dispatch: function (gestureType, frame) {
+        _dispatch: function (gestureInfo) {
             var eventList = this._registeredEventList;
+            var gestureType = gestureInfo.type;
+
             if (!eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {
-                callback(gestureType, frame);
+                callback(gestureInfo);
             });
         },
 
@@ -98,8 +111,9 @@ define([], function () {
             eventList[evt].push(callback.bind(this));
         },
 
-        gestureHappened: function (gestureType, frame) {
-            this._dispatch(gestureType, frame);
+        gestureHappened: function (gestureInfo) {
+            debugger
+            this._dispatch(gestureInfo);
         },
 
         frameHappened: function (frame) {
