@@ -1,6 +1,6 @@
 define([
-	"gestures/BaseGesture", 
-	"validate_flow/CommonFlow"], function (BaseGesture, CommonFlow) {
+	"./BaseGesture", 
+	"../validate_flow/CommonFlow"], function (BaseGesture, CommonFlow) {
 
 	// 定义测试手势
 	function TestGesture() {

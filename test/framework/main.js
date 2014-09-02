@@ -32,11 +32,11 @@
 */
 
 requirejs.config({
-    baseUrl: '../../gesture_engine/'
+    baseUrl: '../../src/'
 });
 
 
-require(["gestures/TestGesture"], function (TestGesture) {
+require(["./gesture_engine/gestures/TestGesture"], function (TestGesture) {
 
 	function validateTestFrame (frames) {
 

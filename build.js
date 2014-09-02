@@ -1,14 +1,7 @@
 ({
-    baseUrl: './',
-    name: "main.js",
-    out: "main-built.js",
-    modules: [
-        {
-            name: "main"
-        },
-        {
-        	name: "engine"
-        }
-    ],
-    mainConfigFile: "config.js"
+    baseUrl: './src/',
+    name: "main",
+    // include: ['gesture_engine/gestures/BaseGesture', 'gesture_engine/gestures/BaseGesture', 'main'],
+    out: "./build/main-built.js",
+    // mainConfigFile: "config.js"
 })

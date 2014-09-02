@@ -1,4 +1,4 @@
-define (["validate_flow/BaseFlow"], function (BaseFlow) {
+define (["./BaseFlow"], function (BaseFlow) {
 
 	function cloneArray (frames) {
 		var result = [];
