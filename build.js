@@ -1,5 +1,14 @@
 ({
-    baseUrl: './gesture_engine',
-    name: "../main",
-    out: "main-built.js"
+    baseUrl: './',
+    name: "main.js",
+    out: "main-built.js",
+    modules: [
+        {
+            name: "main"
+        },
+        {
+        	name: "engine"
+        }
+    ],
+    mainConfigFile: "config.js"
 })

@@ -14,3 +14,8 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 - Gesture Recognition Engine: For recognising leap motion gesture.
 - Chrome Extension: Inject script to the page you browsing. To communicate with the leap server.
 
+
+## How to compress:
+
+- Install `requirejs`: `npm install requirejs`
+- Run command `node node_modules/requirejs/bin/r.js -o build.js`
