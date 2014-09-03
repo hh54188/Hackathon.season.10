@@ -2,7 +2,14 @@ requirejs.config({
     baseUrl: "./src/"
 });
 
-require(["./gesture_engine/engine", "./apis/image", "./lib/leap"], function (Engine, ImgAPI, LeapMotionDoesnotWork) {
+require(
+    [
+        "./lib/leap", "./gesture_engine/engine", 
+        "./gesture_handlers/swipe"
+    ], function (
+        LeapMotionDoesnotWork, Engine, 
+        swipeHandler
+    ) {
 
     // leap.js 不兼容AMD格式，加载依赖但无导出接口
     // 但是为了能够加载这个类库，需要引用leap
@@ -16,7 +23,7 @@ require(["./gesture_engine/engine", "./apis/image", "./lib/leap"], function (Eng
     controller.on("connect", function () {
 
         engine = new Engine;
-        // engine.on("swipe", swipeGestureCallback);
+        engine.on("swipe", swipeHandler);
     });
 
     controller.on("gesture", function (gesture) {
