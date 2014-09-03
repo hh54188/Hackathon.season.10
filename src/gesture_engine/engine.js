@@ -64,11 +64,19 @@ define(function () {
             this._gestureCount = eventList.length;
         },
 
-        _assembleInfo: function (gestureType, gestureFrames) {
+        _assembleCustomInfo: function (gestureType, gestureFrames) {
             return {
                 type: gestureType,
                 isNative: false,
                 data: gestureFrames
+            }
+        },
+
+        _assembleNativeInfo: function (gestureInfo) {
+            return {
+                type: gestureInfo.type,
+                isNative: true,
+                data: gestureInfo
             }
         },
 
@@ -86,7 +94,7 @@ define(function () {
                     var gestureFrames = gesture.validate(frame);
 
                     if (gestureFrames && gestureFrames.length != 0) {
-                        var gestureInfo = _this._assembleInfo(gestureType, gestureFrames);
+                        var gestureInfo = _this._assembleCustomInfo(gestureType, gestureFrames);
                         _this._dispatch(gestureInfo);
                     }                       
                 }
@@ -112,8 +120,8 @@ define(function () {
         },
 
         gestureHappened: function (gestureInfo) {
-            debugger
-            this._dispatch(gestureInfo);
+            var assembledInfo = this._assembleNativeInfo(gestureInfo);
+            this._dispatch(assembledInfo);
         },
 
         frameHappened: function (frame) {
@@ -121,7 +129,8 @@ define(function () {
         },
 
         fire: function (gestureInfo) {
-            this._dispatch(gestureInfo);
+            var assembleInfo = this._assembleNativeInfo(gestureInfo); 
+            this._dispatch(assembleInfo);
         }
     }
 
