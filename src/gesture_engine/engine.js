@@ -15,7 +15,7 @@ var isString = function (str) {
 };
 
 
-define(["./foo"], function () {
+define(function () {
 
     var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];
 
@@ -120,8 +120,8 @@ define(["./foo"], function () {
             this._checkGesture(frame);
         },
 
-        fire: function () {
-            this._dispatch(arguments);
+        fire: function (gestureInfo) {
+            this._dispatch(gestureInfo);
         }
     }
 

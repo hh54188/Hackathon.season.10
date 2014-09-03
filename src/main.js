@@ -17,13 +17,13 @@ require(["./gesture_engine/engine", "./apis/image", "./lib/leap"], function (Eng
         });
     });
 
-    controller.on("gesture", function (gesture, frame) {
+    controller.on("gesture", function (gesture) {
         // 还是需要具体的手势参数的
         // 比如一个swipe手势，可能是从左到右，
         // 也可能是从右到走，需要具体的数据进行判断
         debugger
-        console.log(gesture, frame);
-        // engine.gestureHappened(gesture.type, frame);
+        console.log(gesture);
+        engine.gestureHappened(gesture);
     });
 
     controller.on("frame", function (frame) {
