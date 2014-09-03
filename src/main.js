@@ -12,8 +12,8 @@ require(["./gesture_engine/engine", "./apis/image", "./lib/leap"], function (Eng
     controller.on("connect", function () {
 
         engine = new Engine;
-        engine.on("swipe", function (gestureType, frame) {
-            console.log(gestureType, frame);
+        engine.on("swipe", function (gestureInfo) {
+            console.log(gestureInfo);
         });
     });
 
