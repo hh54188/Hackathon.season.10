@@ -4,25 +4,30 @@ define (function () {
 		return false;	
 	} 
 
+	var emptyElement = {
+		style: {},
+		click: new Function
+	}
+
 	// 按钮：
 
-	var nextBtn = $(".img-next"); // 下一张图片
-	var prevBtn = $(".img-prev"); // 上一张图片
+	var nextBtn = $(".img-next") || emptyElement; // 下一张图片
+	var prevBtn = $(".img-prev") || emptyElement; // 上一张图片
 
-	var slideNextBtn = $(".slider-btn-next"); // 列表下一页
-	var slidePrevBtn = $(".slider-btn-prev"); // 列表前一页
+	var slideNextBtn = $(".slider-btn-next") || emptyElement; // 列表下一页
+	var slidePrevBtn = $(".slider-btn-prev") || emptyElement; // 列表前一页
 
-	var zoomInBtn = $("#btnZoomIn"); // 放大
-	var zoomOutBtn = $("#btnZoomOut"); // 缩小
+	var zoomInBtn = $("#btnZoomIn") || emptyElement; // 放大
+	var zoomOutBtn = $("#btnZoomOut") || emptyElement; // 缩小
 
-	var pullHandler = $(".album-handler"); // 是否显示列表
+	var pullHandler = $(".album-handler") || emptyElement; // 是否显示列表
 
 	// 容器：
 
-	var img = $("#srcPic img"); // 当前显示的图片
-	var ad = $("#sider"); // 右侧广告栏
-	var header = $("#header"); // 顶栏
-	var dock = $(".album-pnl"); // 图片列表
+	var img = $("#srcPic img") || emptyElement; // 当前显示的图片
+	var ad = $("#sider") || emptyElement; // 右侧广告栏
+	var header = $("#header") || emptyElement; // 顶栏
+	var dock = $(".album-pnl") || emptyElement; // 图片列表
 
 
 	var rotateX = 0,

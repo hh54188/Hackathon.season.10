@@ -55,8 +55,8 @@ This is a web app which try to using *leap motion* take the place of mouse and k
     - `npm install grunt-contrib-requirejs`
     - `npm install grunt-contrib-uglify`
     - `npm install grunt-contrib-concat`
-3. If you want to build a debug version run `grunt debug`
-4. If you want to build a deploy version run `grunt deploy`
+3. If you want to build a debug version run `grunt -v debug`
+4. If you want to build a deploy version run `grunt -v  deploy`
 
 ### Using requrejs
 

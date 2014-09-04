@@ -6,7 +6,7 @@ module.exports = function(grunt) {
         concat: {
             debug: {
                 src: ['./src/lib/leap.js', './src/lib/require.js','./build/main.debug.js'],
-                dest: 'js/build/main.debug.js'
+                dest: './build/main.debug.js'
             }
         },
         uglify: {
