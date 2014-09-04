@@ -20,7 +20,15 @@
 
 define(["../apis/image"], function (ImageAPI) {
 
-	var PROCESSING = false;
+	var onProcessing = false;
+
+	var directionObserver = {
+		toRight: [],
+		toLeft: [],
+		toUp: [],
+		toDown: []
+	};
+
 	var finishedMark = {
 		start: false,
 		end: false
@@ -41,7 +49,7 @@ define(["../apis/image"], function (ImageAPI) {
 		setFinishedMark("end", false);
 	}
 
-	function checkFinishedMark () {
+	function checkIsFinished () {
 		for (var mark in finishedMark) {
 			if (!finishedMark[mark]) {
 				return false;
@@ -59,12 +67,34 @@ define(["../apis/image"], function (ImageAPI) {
 
 	function _callback (gestureInfo) {
 
+		// 我要判断是向左滑动还是向右滑动
+		// 是向上滑动还是向下滑动
+		
+		// 然后调用对应的API，这里采用观察者模式
+		// 因为一个手势可能对应多个API
+		
+		// 最后再重置标志位，
+		// 但这里有一个问题是，
+		// 动画是有时间过程的(最好是在动画结束的回调里重置标志位)
+		// 还好大部分都没有这个需求
+		
+		onProcessing = false;
+		resetFinishedMark();
+		
 	}
 
 	function entry (gestureInfo) {
-		var data = gestureInfo.data;
-		if (checkIsStart() && data)
+		if (onProcessing) {
+			return;
+		}
 
+		var data = gestureInfo.data;
+		setFinishedMark(data.state);
+		if (checkIsFinished()) {
+
+			onProcessing = true;
+			_callback(gestureInfo);
+		}
 	}
 
 	return entry;

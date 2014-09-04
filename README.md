@@ -45,3 +45,21 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 --index.html
 
 ```
+
+## How to build:
+
+### Using grunt
+
+1. First instll grunt: `npm install -g grunt-cli`
+2. Install `requirejs`, `uglify`, `concat`: 
+    - `npm install grunt-contrib-requirejs`
+    - `npm install grunt-contrib-uglify`
+    - `npm install grunt-contrib-concat`
+3. If you want to build a debug version run `grunt debug`
+4. If you want to build a deploy version run `grunt deploy`
+
+### Using requrejs
+
+1. Install `requirejs`: `npm install requirejs`
+2. Copy `./node_modules/requirejs/bin/r.js` to root `./r.js`
+3. Run `r.js build.js`
