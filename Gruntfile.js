@@ -4,38 +4,35 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // pkg: grunt.file.readJSON('package.json'),
         concat: {
-            target: {
-                src: ['./src/lib/require.js','./build/main-built.js'],
-                dest: 'js/build/min.js'
+            debug: {
+                src: ['./src/lib/leap.js', './src/lib/require.js','./build/main.debug.js'],
+                dest: 'js/build/main.debug.js'
             }
         },
         uglify: {
-            options: {
-                compress: {
-                    global_defs: {
-                        "DEBUG": true
-                    }
-                }
-            },
-            target: {
+            deploy: {
                 files: {
-                    './build/min.js': ['./src/lib/require.js','./build/main-built.js']        
+                    './build/main.deploy.js': ['./src/lib/leap.js', './src/lib/require.js','./build/main.min.js']        
                 }
             }
         },
         requirejs: {
-            compile1: {
+            debug: {
                 options: {
                     baseUrl: './src/',
                     name: "main",
-                    out: "./build/main-built.js"
+                    out: "./build/main.debug.js",
+                    uglify: {
+                        beautify: true,
+                        no_mangle: true
+                    }
                 }
             },
-            compile2: {
+            deploy: {
                 options: {
                     baseUrl: './src/',
                     name: "main",
-                    out: "./build/main-hi.js"
+                    out: "./build/main.min.js"
                 }
             }            
         }
@@ -47,7 +44,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // Default task(s).
-    grunt.registerTask('debug', ['requirejs', 'uglify']);
-    grunt.registerTask('deploy', ['requirejs', 'uglify']);
+    grunt.registerTask('debug', ['requirejs:debug', 'concat:debug']);
+    grunt.registerTask('deploy', ['requirejs:deploy', 'uglify:deploy']);
 
 };

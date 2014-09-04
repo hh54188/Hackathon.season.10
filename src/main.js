@@ -4,16 +4,18 @@ requirejs.config({
 
 require(
     [
-        "./lib/leap", "./gesture_engine/engine", 
+        "./gesture_engine/engine", 
         "./gesture_handlers/swipe"
     ], function (
-        LeapMotionDoesnotWork, Engine, 
+        Engine, 
         swipeHandler
     ) {
 
     // leap.js 不兼容AMD格式，加载依赖但无导出接口
     // 但是为了能够加载这个类库，需要引用leap
     // 所以直接只用leap.js定义的全局变量
+    if (!window.Leap) return; 
+    
     var controller = new Leap.Controller({
          enableGestures: true
     });
