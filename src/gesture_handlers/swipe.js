@@ -24,16 +24,22 @@ define(["../apis/image"], function (ImageAPI) {
 	// 如果swipe触发太快，
 	// 那么需要通过触发时间间隔来控制
 	// 在测试之前先保留
-	// var lastAction = 
-	// var actionInteral = 
+	var lastActionTimestamp = 0;
+	var actionInteral = 1000 * 1;
 
 	var directionObserver = {
-		right: [],
-		left: [],
+		right: [ImageAPI.nextImage],
+		left: [ImageAPI.prevImage],
 		up: [],
 		down: []
 	};
 	
+	function _checkActionInterval () {
+		return (+new Date) - lastActionTimestamp > actionInteral
+				? true
+				: false;
+	}
+
 	function _dispatchAPI (direction) {
 		directionObserver[direction].forEach(function (fn) {
 			fn();
@@ -72,7 +78,10 @@ define(["../apis/image"], function (ImageAPI) {
 		// 我要判断是向左滑动还是向右滑动
 		// 是向上滑动还是向下滑动
 		var direction = _computeDirection(rawInfo);
+		lastActionTimestamp = +new Date;
+		_dispatchAPI(direction);
 		console.log(direction);
+		
 		
 		// 然后调用对应的API，这里采用观察者模式
 		// 因为一个手势可能对应多个API
@@ -92,7 +101,7 @@ define(["../apis/image"], function (ImageAPI) {
 
 		var data = gestureInfo.data;
 		
-		if (data.state == "stop") {		
+		if (data.state == "stop" && _checkActionInterval()) {		
 			onProcessing = true;
 			_callback(data);
 		}

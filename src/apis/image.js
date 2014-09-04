@@ -1,12 +1,17 @@
 define (function () {
+
+	var emptyFn = function () {
+		console.log("NO API");
+	}
+
 	if (!window.$) {
-		console.log("$ expected!");
-		return false;	
+		window.$ = emptyFn;
 	} 
+
 
 	var emptyElement = {
 		style: {},
-		click: new Function
+		click: emptyFn
 	}
 
 	// 按钮：

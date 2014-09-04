@@ -10,16 +10,34 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 - Chrome Extension: Inject script to the page you browsing. To communicate with the leap server.
 
 
-## How to compress:
+## 对require.js修改
 
-- Install `requirejs`: `npm install requirejs`
-- Run command `r.js -o build.js`
+因为要在百度图片做应用，但是他们已经定义了`require`和`define`，所以要对原始的require.js做修改。修改有两处
+
+1. 在开始前对`define = null`, `require = null`, `requirejs = null`置空
+2. 在requirejs中对当前环境是否存在`require`和`define`有判断。移除了这些判断，直接覆盖原方法。同时可能存在覆盖不完全的情况。所以开始还要全部置空
 
 
-## How to run test
 
-- Run gesture engine with server: http://127.0.0.1:8000/test/
-- Run basic gesture: http://127.0.0.1:8000/test/ges.html
+## How to build:
+
+### Using grunt
+
+1. First instll grunt: `npm install -g grunt-cli`
+2. Install `requirejs`, `uglify`, `concat`: 
+    - `npm install grunt-contrib-requirejs`
+    - `npm install grunt-contrib-uglify`
+    - `npm install grunt-contrib-concat`
+3. If you want to build a debug version run `grunt -v debug`
+4. If you want to build a deploy version run `grunt -v  deploy`
+
+### Using requrejs
+
+1. Install `requirejs`: `npm install requirejs`
+2. Copy `./node_modules/requirejs/bin/r.js` to root `./r.js`
+3. Run `r.js build.js`
+
+
 
 
 ## Folder Structor
@@ -46,20 +64,4 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 
 ```
 
-## How to build:
 
-### Using grunt
-
-1. First instll grunt: `npm install -g grunt-cli`
-2. Install `requirejs`, `uglify`, `concat`: 
-    - `npm install grunt-contrib-requirejs`
-    - `npm install grunt-contrib-uglify`
-    - `npm install grunt-contrib-concat`
-3. If you want to build a debug version run `grunt -v debug`
-4. If you want to build a deploy version run `grunt -v  deploy`
-
-### Using requrejs
-
-1. Install `requirejs`: `npm install requirejs`
-2. Copy `./node_modules/requirejs/bin/r.js` to root `./r.js`
-3. Run `r.js build.js`
