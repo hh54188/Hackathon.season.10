@@ -9,6 +9,39 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 - Gesture Recognition Engine: For recognising leap motion gesture.
 - Chrome Extension: Inject script to the page you browsing. To communicate with the leap server.
 
+## Frame data structor
+
+```
+
+// Attributes:
+
+- currentFrameRate
+- fingers []
+- gestures []
+- *hands [] // list of Hand objects detected in this frame
+- id
+- interactionBox
+- pointables []
+- tools []
+- timestamp
+- *valid
+
+// Methods:
+
+- dump
+- finger
+- hand
+- pointable
+- *rotationAngle
+- *rotationAxis
+- *rotationMatrix
+- *scaleFactor
+- tool
+- toString
+- *translation
+
+```
+
 
 ## 对require.js修改
 
