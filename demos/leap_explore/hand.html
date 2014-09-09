@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Show frame's hand data</title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<script type="text/javascript">
+
+		var controller = new Leap.Controller();
+
+		controller.on("frame", function (frame) {
+			console.log(frame.hands);
+
+			// palmNormal: The normal vector to the palm. If your hand is flat, this vector will point downward, or “out” of the front surface of your palm.
+			
+			// direction: The direction from the palm position toward the fingers.
+			
+			// sphereRadius:
+		});
+
+		controller.connect();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

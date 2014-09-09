@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!--<script type="text/javascript" src="../../src/lib/jquery.js"></script>-->
+	<script type="text/javascript" src="../../src/lib/velocity.min.js"></script>
+	<style type="text/css">
+		body {
+			perspective: 1000px;
+		}
+		img {
+			
+			box-shadow: 0 0 15px black;
+			margin: 0 auto;
+			display: block;
+			
+			transform-style: preserve-3d;
+			transform: translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+
+			transition: all .3s ease;
+		}
+	</style>
+</head>
+<body>
+	<img src="bdlogo.png">
+	<script type="text/javascript">
+	
+	document.images[0].addEventListener("webkitTransitionEnd", function () {
+		console.log("ANIMATION FINISHED");
+	}, false);
+
+	document.body.onclick = function () {
+		document.images[0].style.transform = "translateZ(0px) rotateX(30deg) rotateY(0deg) rotateZ(0deg)";
+	}
+	/*
+		How to transform with velocity
+		Velocity(divs, propertyObj, optionsObj)
+
+	 */
+	</script>
+</body>
+</html>
