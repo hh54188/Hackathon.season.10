@@ -10,16 +10,48 @@
 		controller.on("frame", function (frame) {
 			var interactionBox = frame.interactionBox;
 			if (frame.hands.length) {
-				var rightHand = frame.hands[0];
-				console.log(rightHand.palmNormal);
-				var previousFrame = controller.frame(10);
 
+				var rightHand = frame.hands[0];
+				var previousFrame = controller.frame(1);
+
+
+				// 现在需要解决的问题：
+				// 1. 【已解决】识别右手的弯曲程度grabStrength
+				// 2. 【未解决】识别左右手的掌心方向？或者手掌旋转角度？
+				// 3. 【未解决】识别右手的*推进*和*后退*
+				// 4. 【未解决】识别右手的手腕旋转
+				// 5. 【未解决】旋转角度和推进角度和初始平面位置需要累加
+				// 6. 
+
+
+				// ID
+				// 每一次手被识别都会产生新的id，并且id为+1递增
+				// 每次id改变时都需要重新根据新的手势其实位置计算起始位置
+				// console.log(rightHand.id); 
+				
+
+
+				// GRABSTRENGTH:
+				// console.log(rightHand.grabStrength);
+				// if (rightHand.grabStrength == 1)
+				//  	console.log("close");
+				// else 
+				//  	console.log("open");
+
+
+
+				// MOVEMENT:
+				// 这个movement还是不靠谱，必须要拿到相对于初始位置的位移
 				// var movement = rightHand.translation(previousFrame);
 				// console.log("MOVE:", movement[0].toFixed(1), movement[1].toFixed(1), movement[2].toFixed(1));
 
+
+				// SCALE ???
 				// var scale = rightHand.scaleFactor(previousFrame);
 				// console.log("SCALE:", scale);
-				 
+				
+
+				// ROTATION ???				 
 				// var totalRotation = rightHand.rotationAngle(previousFrame);
 				// var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
 				// console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);

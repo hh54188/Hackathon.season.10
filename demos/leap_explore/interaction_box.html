@@ -14,7 +14,8 @@
 	</script>
 </head>
 <body>
-	<canvas id="displayArea" width="200" height="100" style="background:#dddddd;"></canvas>
+	<canvas id="displayArea" width="400" height="300" style="background:#dddddd;"></canvas>
+	<span></span>
 	<script type="text/javascript">
 
 		var canvasElement = document.getElementById("displayArea");
@@ -27,9 +28,11 @@
 		        canvasElement.width = canvasElement.width; //clear
 		        
 		        //Get a pointable and normalize the tip position
-		        var pointable = frame.pointables[0]; // pointables 的概念是什么意思？跟高级的fingers？
+		        // pointables 的概念是什么意思？跟高级的fingers？
+		        var pointable = frame.pointables[0]; 
+		        var tipPosition = pointable.tipPosition;
 		        var interactionBox = frame.interactionBox;
-		        var normalizedPosition = interactionBox.normalizePoint(pointable.tipPosition, true);
+		        var normalizedPosition = interactionBox.normalizePoint(tipPosition, true);
 
 		        // console.log("ORIGIN:", pointable.tipPosition);
 		        // console.log("normalized:", normalizedPosition);
@@ -39,9 +42,13 @@
 		        // Convert the normalized coordinates to span the canvas
 		        var canvasX = canvasElement.width * normalizedPosition[0];
 		        var canvasY = canvasElement.height * (1 - normalizedPosition[1]);
+		        document.querySelector("span").innerHTML = normalizedPosition[0] + ", " + normalizedPosition[1];
 		        //we can ignore z for a 2D context
 		        
 		        displayArea.strokeText("(" + canvasX.toFixed(1) + ", " + canvasY.toFixed(1) + ")", canvasX, canvasY);
+		        // document.querySelector("span").innerHTML = "(" + tipPosition[0].toFixed(1) + ", "
+          //                          + tipPosition[1].toFixed(1) + ", "
+          //                          + tipPosition[2].toFixed(1) + ")"
 		    }
 		});
 

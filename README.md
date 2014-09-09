@@ -9,6 +9,27 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 - Gesture Recognition Engine: For recognising leap motion gesture.
 - Chrome Extension: Inject script to the page you browsing. To communicate with the leap server.
 
+## TODO
+
+### 百度图片
+
+1. 单只手通过swipe手势控制向前翻动向后翻动图片（识别不够精准，容易误触发，引出下面双手）
+2. 双手控制dock升起，下降（两手同时举高）
+3. 双手控制，移除侧边栏
+4. 手手势（左手手心朝向自己，右手手心朝向外；左手固定不动，通过活动右手（的推送和握力大小）来控制）
+5. 单手画圆圈恢复原装
+
+
+### 百度音乐
+
+1. 新增虚拟控制面板
+2. 精确到关节控制（三个手指），控制音乐音量
+
+### 二期
+
+1. 手势组合生成器，支持自定义手势识别
+
+
 ## Frame data structor
 
 ```
@@ -39,6 +60,47 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 - tool
 - toString
 - *translation
+
+```
+
+## Hand data structor:
+
+```
+- arm
+- confidence
+- *direction
+- fingers[]
+- *grabStrength
+- id
+- thumb // finger
+- ringFinger // finger
+- indexFinger // finger
+- middleFinger // finger
+- pinky // finger
+- *palmNormal
+- *palmPosition
+- *palmVelocity
+- palmWidth
+- pinchStrength
+- pointables[]
+- *sphereCenter
+- *sphereRadius
+- stabilizedPalmPosition
+- timeVisible
+- tools[]
+- valid
+
+// Method:
+
+- finger(id)
+- pitch()
+- roll()
+- rotationAngle(sinceFrame[, axis])
+- rotationAxis(sinceFrame)
+- rotationMatrix(sinceFrame)
+- scaleFactor(sinceFrame)
+- translation(sinceFrame)
+- yaw()
 
 ```
 
