@@ -19,20 +19,22 @@
 
 		var canvasElement = document.getElementById("displayArea");
 		var displayArea = canvasElement.getContext("2d");
-
 		var controller = new Leap.Controller();
+
 		controller.on("frame", function(frame){
 		    if(frame.pointables.length > 0)
 		    {
 		        canvasElement.width = canvasElement.width; //clear
 		        
 		        //Get a pointable and normalize the tip position
-		        var pointable = frame.pointables[0];
+		        var pointable = frame.pointables[0]; // pointables 的概念是什么意思？跟高级的fingers？
 		        var interactionBox = frame.interactionBox;
 		        var normalizedPosition = interactionBox.normalizePoint(pointable.tipPosition, true);
 
-		        console.log("ORIGIN:", pointable.tipPosition);
-		        console.log("normalized:", normalizedPosition);
+		        // console.log("ORIGIN:", pointable.tipPosition);
+		        // console.log("normalized:", normalizedPosition);
+		        // console.log(pointable.type);
+		        // console.log(frame.fingers);
 		        
 		        // Convert the normalized coordinates to span the canvas
 		        var canvasX = canvasElement.width * normalizedPosition[0];
@@ -42,6 +44,7 @@
 		        displayArea.strokeText("(" + canvasX.toFixed(1) + ", " + canvasY.toFixed(1) + ")", canvasX, canvasY);
 		    }
 		});
+
 		controller.connect();
 	</script>
 </body>

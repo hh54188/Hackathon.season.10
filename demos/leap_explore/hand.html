@@ -8,13 +8,51 @@
 		var controller = new Leap.Controller();
 
 		controller.on("frame", function (frame) {
-			console.log(frame.hands);
+			var interactionBox = frame.interactionBox;
+			if (frame.hands.length) {
+				var rightHand = frame.hands[0];
+				console.log(rightHand.palmNormal);
+				var previousFrame = controller.frame(10);
 
-			// palmNormal: The normal vector to the palm. If your hand is flat, this vector will point downward, or “out” of the front surface of your palm.
-			
-			// direction: The direction from the palm position toward the fingers.
-			
-			// sphereRadius:
+				// var movement = rightHand.translation(previousFrame);
+				// console.log("MOVE:", movement[0].toFixed(1), movement[1].toFixed(1), movement[2].toFixed(1));
+
+				// var scale = rightHand.scaleFactor(previousFrame);
+				// console.log("SCALE:", scale);
+				 
+				// var totalRotation = rightHand.rotationAngle(previousFrame);
+				// var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
+				// console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);
+				
+
+				/*
+					关于值的正负：
+					1. 首先要熟悉坐标系
+                   
+                   +y
+                   |
+                   |
+                   |
+ 				    --------->+x
+				   /
+				  /    o(注意坐标原点在这里)
+				 /
+                +z
+
+                所以右手从左向右滑动时，x轴增量会变化，并且是增值为正值
+                所以右手从右向左滑动时，x轴增量会变化，并且是增值为负值
+
+                当右手向前推时，z轴增量会变化，并且增值为负值
+                当右手向身体方向收缩时，z轴增量会变化，并且增值为正值
+
+                当右手抬高时，y轴增量会变化，增值正值
+                当右手降低时，y轴增量会变化，增值为负
+
+
+
+				 */
+			}
+
 		});
 
 		controller.connect();

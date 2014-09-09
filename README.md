@@ -16,12 +16,12 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 // Attributes:
 
 - currentFrameRate
-- fingers []
+- fingers []  //array of Pointable() objects representing fingers 那还不如直接使用pointables?
 - gestures []
 - *hands [] // list of Hand objects detected in this frame
 - id
 - interactionBox
-- pointables []
+- pointables [] // 更高级的finger？ The list of Pointable objects (fingers) detected in this frame that are associated with this hand,
 - tools []
 - timestamp
 - *valid
