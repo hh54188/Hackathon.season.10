@@ -14,6 +14,9 @@
 				var rightHand = frame.hands[0];
 				var previousFrame = controller.frame(1);
 
+				// Direction???/PalmNormal???/PalmPosition
+				console.log(rightHand.palmPosition);
+
 
 				// 现在需要解决的问题：
 				// 1. 【已解决】识别右手的弯曲程度grabStrength
@@ -37,6 +40,25 @@
 				//  	console.log("close");
 				// else 
 				//  	console.log("open");
+				/*
+					function handStateFromHistory(hand, historySamples) {
+					    if(hand.grabStrength == 1) return "closed";
+					    else if (hand.grabStrength == 0) return "open";
+					    else {
+					        var sum = 0
+					        for(var s = 0; s < historySamples; s++){
+					            var oldHand = controller.frame(s).hand(hand.id)
+					            if(!oldHand.valid) break;
+					            sum += oldHand.grabStrength
+					        }
+					        var avg = sum/s;
+					        if(hand.grabStrength - avg < 0) return "opening";
+					        else if (hand.grabStrength > 0) return "closing";
+					    }
+					    return"not detected";
+					}
+					console.log("Hand is " + handStateFromHistory(hand, 10));
+				 */
 
 
 
