@@ -14,7 +14,11 @@
 				var rightHand = frame.hands[0];
 				var previousFrame = controller.frame(1);
 
-				// Direction???/PalmNormal???/PalmPosition
+				// Direction??? 从掌心触发，沿着手指，方向向外
+				// PalmNormal??? 垂直于手掌，方向远离手掌
+				// 所以palmNormal与direction是互相垂直的
+				// 如何用三维向量表示palmnormal？
+				// PalmPosition: 掌心位置，与x, y, z轴上标注的位置一致
 				console.log(rightHand.palmPosition);
 
 
