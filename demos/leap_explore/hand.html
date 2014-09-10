@@ -3,16 +3,57 @@
 <head>
 	<title>Show frame's hand data</title>
 	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<style type="text/css">
+	.shadow {
+		box-shadow: 0 0 10px black;
+	}
+	</style>
+</head>
+<body>
+	<img src="http://www.baidu.com/img/bdlogo.png" 
+		style="position:absolute;
+		top:50%;
+		margin-top: -129px;
+		left:50%;
+		margin-left: -270px;">
 	<script type="text/javascript">
 
 		var controller = new Leap.Controller();
+		var img = document.querySelector("img");
 
 		controller.on("frame", function (frame) {
 			var interactionBox = frame.interactionBox;
 			if (frame.hands.length) {
 
 				var rightHand = frame.hands[0];
+				if (rightHand.type == "left") {
+					return;
+				}
+
+				if (rightHand.grabStrength != 0) {
+					img.classList.remove("shadow");
+					return;
+				}
+
+				if (rightHand.grabStrength == 0) {
+					img.classList.add("shadow");
+				}
+
 				var previousFrame = controller.frame(60);
+
+				// DEMO 通过手的移动控制图片的移动:
+				var interactionBox = frame.interactionBox;
+		        var normalizedPosition = interactionBox.normalizePoint(rightHand.palmPosition, true);
+				console.log(normalizedPosition);
+
+				var docWidth = window.innerWidth;
+				var docHeight = window.innerHeight;
+
+				var left = docWidth * normalizedPosition[0];
+				var top = docHeight * (1 - normalizedPosition[1]);
+
+				img.style.top = top + "px";
+				img.style.left = left + "px";
 
 				// roll()
 				// console.log(rightHand.roll());
@@ -23,8 +64,8 @@
 				// console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);
 
 
-				var axis = rightHand.rotationAxis(previousFrame);
-				console.log("Axis of Rotation: (" + axis[0] + ", " + axis[1] + ", " + axis[2] + ")");
+				// var axis = rightHand.rotationAxis(previousFrame);
+				// console.log("Axis of Rotation: (" + axis[0] + ", " + axis[1] + ", " + axis[2] + ")");
 
 
 				
@@ -129,9 +170,6 @@
 		});
 
 		controller.connect();
-	</script>
-</head>
-<body>
-
+	</script>		
 </body>
 </html>
