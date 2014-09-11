@@ -26,42 +26,15 @@
 			if (frame.hands.length) {
 
 				var rightHand = frame.hands[0];
-				if (rightHand.type == "left") {
-					return;
-				}
-
-				if (rightHand.grabStrength != 0) {
-					img.classList.remove("shadow");
-					return;
-				}
-
-				if (rightHand.grabStrength == 0) {
-					img.classList.add("shadow");
-				}
-
-				var previousFrame = controller.frame(60);
-
-				// DEMO 通过手的移动控制图片的移动:
-				var interactionBox = frame.interactionBox;
-		        var normalizedPosition = interactionBox.normalizePoint(rightHand.palmPosition, true);
-				console.log(normalizedPosition);
-
-				var docWidth = window.innerWidth;
-				var docHeight = window.innerHeight;
-
-				var left = docWidth * normalizedPosition[0];
-				var top = docHeight * (1 - normalizedPosition[1]);
-
-				img.style.top = top + "px";
-				img.style.left = left + "px";
+				var previousFrame = controller.frame(1);
 
 				// roll()
-				// console.log(rightHand.roll());
+				console.log(rightHand.roll(), rightHand.roll() * 360);
 				
 				// rotationAngle(sinceFrame[, axis])??? 还是不会用
 				// var totalRotation = rightHand.rotationAngle(previousFrame);
 				// var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
-				// console.log("Rot: " + totalRotation + ", Z Rot:" + rotationAroundZAxis);
+				// console.log(", Z Rot:" + rotationAroundZAxis);
 
 
 				// var axis = rightHand.rotationAxis(previousFrame);
@@ -80,7 +53,7 @@
 
 				// 现在需要解决的问题：
 				// 1. 【已解决】识别右手的弯曲程度grabStrength
-				// 2. 【未解决】识别左右手的掌心方向？或者手掌旋转角度？
+				// 2. !!【未解决】识别左右手的掌心方向？或者手掌旋转角度？
 				// 3. 【未解决】识别右手的*推进*和*后退*
 				// 4. 【未解决】识别右手的手腕旋转
 				// 5. 【未解决】旋转角度和推进角度和初始平面位置需要累加

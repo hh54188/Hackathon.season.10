@@ -29,6 +29,7 @@ require(
     });
 
     controller.on("gesture", function (gesture) {
+        console.log(gesture.type);
         engine.gestureHappened(gesture);
     });
 
