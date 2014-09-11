@@ -26,6 +26,14 @@ require(
 
         engine = new Engine;
         engine.on("swipe", swipeHandler);
+        /*
+             1. 把当前帧交给Gesture验证，如果.validate方法返回为true
+             2. 则再由handler再对图片做处理（handler里面会记录图片的当前位置）
+
+         */
+        // engine.on("translate", swipeHandler); // 图片横向移动
+        // engine.on("scale", swipeHandler); // 图片缩放
+        // engine.on("rotate", swipeHandler); // 图片旋转
     });
 
     controller.on("gesture", function (gesture) {

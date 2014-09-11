@@ -1,28 +1,20 @@
+/*
+	跟随手势：
+	一旦识别成功，及触发手势
+
+ */
 define (["./BaseFlow"], function (BaseFlow) {
 
-	function cloneArray (frames) {
-		var result = [];
-		frames.forEach(function (frame) {
-			result.push(frame);
-		});
-
-		return result;
-	}
-
-	function CommonFlow (gesture, followEachFrame) {
+	function FollowedFlow (gesture) {
 
 		this.MAX_FRAME_NUM = 15;
 
 		this.gesture = gesture;
-		this.currentFrameCount = 0;
-		this.frameQueue = [];
 
 		this.isRecognitionStarted = false;
-		// 用于单帧手势情况，比如图片更随手势移动
-		this.followEachFrame = followEachFrame || false;
 	}
 
-	CommonFlow.prototype = Object.create(BaseFlow.prototype, {
+	FollowedFlow.prototype = Object.create(BaseFlow.prototype, {
 
 		reset: {
 			value: function () {
@@ -42,10 +34,6 @@ define (["./BaseFlow"], function (BaseFlow) {
 				if (!this.isRecognitionStarted) {
 
 					if (gesture.validateGestureStart(frame)) {
-						if (this.followEachFrame) {
-							return true;
-						}
-
 						this.isRecognitionStarted = true;
 						this.currentFrameCount = 1;
 					} else {
@@ -79,5 +67,5 @@ define (["./BaseFlow"], function (BaseFlow) {
 		}
 	});
 
-	return CommonFlow;
+	return FollowedFlow;
 });
