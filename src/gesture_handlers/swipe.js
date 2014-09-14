@@ -16,6 +16,8 @@
         type: "swipe" // "swipe"
     }
 
+    手要适当倾斜才能有效果，垂直状态机器无法识别
+
  */
 
 define(["../apis/image"], function (ImageAPI) {
@@ -25,7 +27,7 @@ define(["../apis/image"], function (ImageAPI) {
 	// 那么需要通过触发时间间隔来控制
 	// 在测试之前先保留
 	var lastActionTimestamp = 0;
-	var actionInteral = 1000 * 1;
+	var actionInteral = 300 * 1;
 
 	var directionObserver = {
 		right: [ImageAPI.nextImage],
@@ -93,17 +95,24 @@ define(["../apis/image"], function (ImageAPI) {
 		onProcessing = false;
 	}
 
-	function entry (gestureInfo) {
+	function entry (controller) {
+		var curFrame = controller.frame();
+		if (!curFrame.gestures || !curFrame.gestures.length) {
+			return
+		}
 
 		if (onProcessing) {
 			return;
 		}
 
-		var data = gestureInfo.data;
-		
-		if (data.state == "stop" && _checkActionInterval()) {		
+		var gesture = curFrame.gestures[0];
+		if (gesture.type != "swipe") {
+			return;
+		}
+
+		if (gesture.state == "stop" && _checkActionInterval()) {		
 			onProcessing = true;
-			_callback(data);
+			_callback(gesture);
 		}
 	}
 

@@ -24,7 +24,7 @@ require(
 
     controller.on("connect", function () {
 
-        engine = new Engine;
+        engine = new Engine(controller);
         engine.on("swipe", swipeHandler);
         /*
              1. 把当前帧交给Gesture验证，如果.validate方法返回为true
@@ -37,7 +37,6 @@ require(
     });
 
     controller.on("gesture", function (gesture) {
-        console.log(gesture.type);
         engine.gestureHappened(gesture);
     });
 

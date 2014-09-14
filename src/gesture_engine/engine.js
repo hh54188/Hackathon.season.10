@@ -40,7 +40,8 @@ define(function () {
         
     })(arguments);
 
-    function GestureRecognitionEngine() {
+    function GestureRecognitionEngine(controller) {
+        this.controller = controller; 
 
         this._registeredEventList = {};
         this._gestures = gestures;
@@ -64,23 +65,7 @@ define(function () {
             this._gestureCount = eventList.length;
         },
 
-        _assembleCustomInfo: function (gestureType, gestureFrames) {
-            return {
-                type: gestureType,
-                isNative: false,
-                data: gestureFrames
-            }
-        },
-
-        _assembleNativeInfo: function (gestureInfo) {
-            return {
-                type: gestureInfo.type,
-                isNative: true,
-                data: gestureInfo
-            }
-        },
-
-        _checkGesture: function (frame) {
+        _checkGesture: function () {
             var gestures = this._gestures,
                 gesture;
             var _this = this;
@@ -91,11 +76,10 @@ define(function () {
                     return;
                 } else {
                     gesture = gestures[gestureType];
-                    var gestureFrames = gesture.validate(frame);
+                    var valdiateResult = gesture.validate(_this.controller);
 
-                    if (gestureFrames && gestureFrames.length != 0) {
-                        var gestureInfo = _this._assembleCustomInfo(gestureType, gestureFrames);
-                        _this._dispatch(gestureInfo);
+                    if (valdiateResult && valdiateResult.type) {
+                        _this._dispatch(valdiateResult);
                     }                       
                 }
             }
@@ -104,11 +88,12 @@ define(function () {
         _dispatch: function (gestureInfo) {
             var eventList = this._registeredEventList;
             var gestureType = gestureInfo.type;
+            var controller = this.controller;
 
             if (!eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {
-                callback(gestureInfo);
+                callback(controller);
             });
         },
 
@@ -120,17 +105,11 @@ define(function () {
         },
 
         gestureHappened: function (gestureInfo) {
-            var assembledInfo = this._assembleNativeInfo(gestureInfo);
-            this._dispatch(assembledInfo);
+            this._dispatch(gestureInfo);
         },
 
         frameHappened: function (frame) {
             this._checkGesture(frame);
-        },
-
-        fire: function (gestureInfo) {
-            var assembleInfo = this._assembleNativeInfo(gestureInfo); 
-            this._dispatch(assembleInfo);
         }
     }
 

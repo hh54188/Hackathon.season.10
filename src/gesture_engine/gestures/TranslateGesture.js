@@ -1,33 +1,12 @@
-define([
-	"./BaseGesture", 
-	"../validate_flow/CommonFlow"], function (BaseGesture, CommonFlow) {
+define(function () {
 
 	function TranslateGesture () {
 
 	}
 
-	TestGesture.prototype = Object.create(BaseGesture.prototype, {
+	TestGesture.prototype.validate = function  () {
 
-		ValidateFlowConstructor: {
-			value: CommonFlow
-		},
+	};
 
-		validateGestureStart: {
-			value: function () {
-
-			}
-		},
-
-		validateGestureEnd: {
-
-		},
-
-		validateGestureOnMove: {
-
-		},
-
-		validateGestureBasicCondition: {
-
-		}
-	});
+	return TranslateGesture;
 });
