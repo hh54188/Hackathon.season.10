@@ -4,18 +4,34 @@
 	<title>Grab Demo</title>
 	<script type="text/javascript" src="../../src/lib/leap.js"></script>
 	<style type="text/css">
-	.shadow {
-		box-shadow: 0 0 30px black;
-	}
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			perspective: 1000px;
+			height: 100%;
+		}
+		.shadow {
+			box-shadow: 0 0 30px black;
+		}
+
+		img {
+			position:absolute;
+			top:50%;
+			left:50%;
+			margin-top: -129px;
+			margin-left: -270px;
+
+			transform-style: preserve-3d;
+			transition: all .1s;
+		}
+
 	</style>
 </head>
 <body>
-	<img src="http://www.baidu.com/img/bdlogo.png" 
-		style="position:absolute;
-		top:50%;
-		margin-top: -129px;
-		left:50%;
-		margin-left: -270px;">
+	<img src="http://www.baidu.com/img/bdlogo.png">
 	<script type="text/javascript">
 
 		var controller = new Leap.Controller();
@@ -44,16 +60,23 @@
 				// DEMO 通过手的移动控制图片的移动:
 				var interactionBox = frame.interactionBox;
 		        var normalizedPosition = interactionBox.normalizePoint(rightHand.palmPosition, true);
-				console.log(normalizedPosition);
+				
 
 				var docWidth = window.innerWidth;
 				var docHeight = window.innerHeight;
 
-				var left = docWidth * normalizedPosition[0];
-				var top = docHeight * (1 - normalizedPosition[1]);
+				var halfWidth =  docWidth / 2;
+				var halfHeight = docHeight / 2;
 
-				img.style.top = top + "px";
-				img.style.left = left + "px";
+				var translateX = docWidth * normalizedPosition[0] - halfWidth;
+				// translate的坐标的Y轴与leap motion的Y轴相反 
+				var translateY = docHeight * (1 - normalizedPosition[1]) - halfHeight;
+
+				console.log(translateX, translateY);
+				img.style.transform = "translateX(" + translateX + "px) translateY(" + translateY + "px)";
+
+			
+
 			}
 
 		});
