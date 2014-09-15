@@ -1,5 +1,19 @@
 define (["../lib/velocity"], function (Velocity) {
 
+	var hasInit = false;
+	if (!hasInit 
+		&& $ 
+		&& $("#srcPic") 
+		&& $("#img-next") 
+		&& $("#img-prev")) {
+
+		document.body.style.perspective = "1000px";
+		$("#srcPic img")[0].style.transformStyle = "preserve-3d";
+
+		console.log("API INIT CONPLETE");
+		hasInit = true;
+	}
+
 	var emptyFn = function () {
 		console.log("NO API");
 	}
@@ -55,6 +69,18 @@ define (["../lib/velocity"], function (Velocity) {
 		].join(" ");
 	}
 
+	function reset (target) {
+
+		rotateX = 0,
+		rotateY = 0,
+		rotateZ = 0,
+		translateX = 0,
+		translateY = 0,
+		translateZ = 0;
+
+		target.style.transform = generateTransform(); 
+	}
+
 	return {
 
 		threed: {
@@ -69,16 +95,16 @@ define (["../lib/velocity"], function (Velocity) {
 				img.style.transform = generateTransform();
 			},
 
-			translateOnSurface: function (xAct, yAct) {
+			translate: function (x, y) {
 
-				translateX = xAct? ++translateX: --translateX;
-				translateY = yAct? ++translateY: --translateY;
-
-				img.style.transform = generateTransform();
+				Velocity(img[0], {
+					"translateX": x + "px",
+					"translateY": y + "px"
+				})
 			},
 
 			rotateOn3d: function () {
-				// TODO	
+				
 			}
 		},
 
@@ -96,6 +122,7 @@ define (["../lib/velocity"], function (Velocity) {
 		 */
 		nextImage: function () {
 			nextBtn.click();
+			reset();
 		},
 		
 		/**
@@ -103,6 +130,7 @@ define (["../lib/velocity"], function (Velocity) {
 		 */
 		prevImage: function () {
 			prevBtn.click();
+			reset();
 		},
 
 		/**

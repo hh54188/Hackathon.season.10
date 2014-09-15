@@ -71,7 +71,7 @@ define(["./gestures/TranslateGesture"], function () {
             this._gestureCount = eventList.length;
         },
 
-        _checkGesture: function () {
+        _checkGesture: function (frame) {
             var gestures = this._gestures,
                 gesture;
             var _this = this;
@@ -82,17 +82,16 @@ define(["./gestures/TranslateGesture"], function () {
                     return;
                 } else {
                     gesture = gestures[gestureType];
-                    var valdiateResult = gesture.validate(_this.controller);
+                    var valdiateResult = gesture.validate(_this.controller, frame);
 
                     if (valdiateResult) {
-                        _this._dispatch(gestureType);
+                        _this._dispatch(gestureType, frame);
                     }                       
                 }
             }
         },
 
-        _dispatch: function (gestureType) {
-            console.log(gestureType);
+        _dispatch: function (gestureType, frame) {
 
             var eventList = this._registeredEventList;
             var controller = this.controller;
@@ -100,7 +99,7 @@ define(["./gestures/TranslateGesture"], function () {
             if (!eventList[gestureType] || !eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {
-                callback(controller);
+                callback(controller, frame);
             });
         },
 
@@ -111,8 +110,8 @@ define(["./gestures/TranslateGesture"], function () {
             eventList[evt].push(callback.bind(this));
         },
 
-        gestureHappened: function (gestureInfo) {
-            this._dispatch(gestureInfo.type);
+        gestureHappened: function (gestureInfo, frame) {
+            this._dispatch(gestureInfo.type, frame);
         },
 
         frameHappened: function (frame) {

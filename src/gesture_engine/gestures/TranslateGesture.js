@@ -4,7 +4,7 @@ define(function () {
 
 	}
 
-	TranslateGesture.prototype.validate = function  (controller) {
+	TranslateGesture.prototype.validate = function  (controller, frame) {
 		if (!controller) return;
 
 		var curFrame = controller.frame();
