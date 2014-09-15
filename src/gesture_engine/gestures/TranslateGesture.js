@@ -7,8 +7,7 @@ define(function () {
 	TranslateGesture.prototype.validate = function  (controller, frame) {
 		if (!controller) return;
 
-		var curFrame = controller.frame();
-		var hands = curFrame.hands;
+		var hands = frame.hands;
 
 		//  只允许有一只手
 		if (!hands.length || hands.length == 2) {
@@ -22,7 +21,7 @@ define(function () {
 
 		var rightHand = hands[0];
 		
-		if (rightHand.grabStrength == 0) {
+		if (rightHand.grabStrength == 1) {
 			return true;
 		}
 

@@ -96,7 +96,8 @@ define(["../apis/image"], function (ImageAPI) {
 	}
 
 	function entry (controller, frame) {
-		// var curFrame = controller.frame();
+
+		var curFrame = frame;
 
 		// 按道理来说不应该会出现取出当前帧之后却发现没有任何手势
 		// 这个问题以后再解决

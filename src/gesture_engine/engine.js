@@ -33,7 +33,7 @@ define(["./gestures/TranslateGesture"], function () {
         // Handle custom gestures:
         toArray(gestures).forEach(function (Gesture) {
 
-            var gestureName = Gesture.name.match(matchName)[1];
+            var gestureName = Gesture.name.match(matchName)[1].toLowerCase();
             result[gestureName] = new Gesture;
         });
         
@@ -95,7 +95,6 @@ define(["./gestures/TranslateGesture"], function () {
 
             var eventList = this._registeredEventList;
             var controller = this.controller;
-
             if (!eventList[gestureType] || !eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {

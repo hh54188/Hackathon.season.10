@@ -29,7 +29,7 @@
 				var previousFrame = controller.frame(1);
 
 				// roll()
-				console.log(rightHand.roll(), rightHand.roll() * 360);
+				// console.log(rightHand.roll(), rightHand.roll() * 360);
 				
 				// rotationAngle(sinceFrame[, axis])??? 还是不会用
 				// var totalRotation = rightHand.rotationAngle(previousFrame);
@@ -102,8 +102,8 @@
 
 
 				// SCALE ???
-				// var scale = rightHand.scaleFactor(previousFrame);
-				// console.log("SCALE:", scale);
+				var scale = rightHand.scaleFactor(controller.frame(3));
+				console.log("SCALE:", scale);
 				
 
 				// ROTATION ???				 

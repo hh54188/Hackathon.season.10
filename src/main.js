@@ -5,7 +5,7 @@ requirejs.config({
 require(
     [
         "./gesture_engine/engine", 
-        "./gesture_handlers/swipe"
+        "./gesture_handlers/swipe",
         "./gesture_handlers/translate"
     ], function (
         Engine, 

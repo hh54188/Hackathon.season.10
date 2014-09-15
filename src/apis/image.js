@@ -1,14 +1,19 @@
-define (["../lib/velocity"], function (Velocity) {
+define (function () {
 
 	var hasInit = false;
 	if (!hasInit 
 		&& $ 
 		&& $("#srcPic") 
-		&& $("#img-next") 
-		&& $("#img-prev")) {
+		&& $(".img-next") 
+		&& $(".img-prev")) {
 
 		document.body.style.perspective = "1000px";
-		$("#srcPic img")[0].style.transformStyle = "preserve-3d";
+		var imgTarget = $("#srcPic img").length
+			? $("#srcPic img")[0]
+			: $("#srcPic img");
+
+		imgTarget.style.transformStyle = "preserve-3d";
+		imgTarget.style.transition = "all .1s";
 
 		console.log("API INIT CONPLETE");
 		hasInit = true;
@@ -18,9 +23,9 @@ define (["../lib/velocity"], function (Velocity) {
 		console.log("NO API");
 	}
 
-	if (!window.$) {
-		window.$ = emptyFn;
-	} 
+	// if (!window.$) {
+	// 	window.$ = emptyFn;
+	// } 
 
 
 	var emptyElement = {
@@ -78,6 +83,7 @@ define (["../lib/velocity"], function (Velocity) {
 		translateY = 0,
 		translateZ = 0;
 
+		target.style.transition = "all .1s";
 		target.style.transform = generateTransform(); 
 	}
 
@@ -96,11 +102,9 @@ define (["../lib/velocity"], function (Velocity) {
 			},
 
 			translate: function (x, y) {
-
-				Velocity(img[0], {
-					"translateX": x + "px",
-					"translateY": y + "px"
-				})
+				translateX = x, translateY = y;
+				var target = img.length? img[0]: img;
+				target.style.transform = generateTransform();
 			},
 
 			rotateOn3d: function () {
@@ -122,7 +126,7 @@ define (["../lib/velocity"], function (Velocity) {
 		 */
 		nextImage: function () {
 			nextBtn.click();
-			reset();
+			reset(img.length? img[0]: img);
 		},
 		
 		/**
@@ -130,7 +134,7 @@ define (["../lib/velocity"], function (Velocity) {
 		 */
 		prevImage: function () {
 			prevBtn.click();
-			reset();
+			reset(img.length? img[0]: img);
 		},
 
 		/**
