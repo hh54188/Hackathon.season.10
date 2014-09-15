@@ -1,4 +1,4 @@
-define (function () {
+define (["../lib/velocity"], function (Velocity) {
 
 	var emptyFn = function () {
 		console.log("NO API");
@@ -10,6 +10,7 @@ define (function () {
 
 
 	var emptyElement = {
+		isFake: true,
 		style: {},
 		click: emptyFn
 	}

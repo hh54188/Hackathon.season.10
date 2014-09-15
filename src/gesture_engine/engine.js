@@ -1,3 +1,9 @@
+/*
+    TODO: 一个手势同时触发了多个动作怎么办？
+    
+ */
+
+
 var toArray = function (arguments) {
     return Array.prototype.slice.call(arguments);
 };
@@ -15,7 +21,7 @@ var isString = function (str) {
 };
 
 
-define(function () {
+define(["./gestures/TranslateGesture"], function () {
 
     var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];
 
@@ -78,19 +84,20 @@ define(function () {
                     gesture = gestures[gestureType];
                     var valdiateResult = gesture.validate(_this.controller);
 
-                    if (valdiateResult && valdiateResult.type) {
-                        _this._dispatch(valdiateResult);
+                    if (valdiateResult) {
+                        _this._dispatch(gestureType);
                     }                       
                 }
             }
         },
 
-        _dispatch: function (gestureInfo) {
+        _dispatch: function (gestureType) {
+            console.log(gestureType);
+
             var eventList = this._registeredEventList;
-            var gestureType = gestureInfo.type;
             var controller = this.controller;
 
-            if (!eventList[gestureType].length) return;
+            if (!eventList[gestureType] || !eventList[gestureType].length) return;
 
             eventList[gestureType].forEach(function (callback) {
                 callback(controller);
@@ -105,7 +112,7 @@ define(function () {
         },
 
         gestureHappened: function (gestureInfo) {
-            this._dispatch(gestureInfo);
+            this._dispatch(gestureInfo.type);
         },
 
         frameHappened: function (frame) {

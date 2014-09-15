@@ -7,7 +7,8 @@
 //problems with requirejs.exec()/transpiler plugins that may not be strict.
 /*jslint regexp: true, nomen: true, sloppy: true */
 /*global window, navigator, document, importScripts, setTimeout, opera */
-
+// 修改版！：
+// 强制覆盖当前环境中的requirejs，require，define等全局变量
 var requirejs = null, require = null, define = null;
 (function (global) {
     var req, s, head, baseElement, dataMain, src,

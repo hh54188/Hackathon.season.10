@@ -97,12 +97,11 @@ define(["../apis/image"], function (ImageAPI) {
 
 	function entry (controller) {
 		var curFrame = controller.frame();
-		if (!curFrame.gestures || !curFrame.gestures.length) {
-			return
-		}
 
-		if (onProcessing) {
-			return;
+		// 按道理来说不应该会出现取出当前帧之后却发现没有任何手势
+		// 这个问题以后再解决
+		if (onProcessing || !curFrame.gestures || !curFrame.gestures.length) {
+			return
 		}
 
 		var gesture = curFrame.gestures[0];
