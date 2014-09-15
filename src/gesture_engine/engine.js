@@ -21,7 +21,8 @@ var isString = function (str) {
 };
 
 
-define(["./gestures/TranslateGesture"], function () {
+define(["./gestures/TranslateGesture",
+        "./gestures/ScaleGesture"], function () {
 
     var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];
 
@@ -33,7 +34,10 @@ define(["./gestures/TranslateGesture"], function () {
         // Handle custom gestures:
         toArray(gestures).forEach(function (Gesture) {
 
-            var gestureName = Gesture.name.match(matchName)[1].toLowerCase();
+            // var gestureName = Gesture.name.match(matchName)[1].toLowerCase();
+            var originName = Gesture.name.match(matchName);
+            var gestureName = originName[1].toLowerCase();
+            
             result[gestureName] = new Gesture;
         });
         

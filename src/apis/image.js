@@ -91,14 +91,20 @@ define (function () {
 
 		threed: {
 
-			zoomIn: function () {
-				translateZ++;
-				img.style.transform = generateTransform();
-			},
+			// zoomIn: function () {
+			// 	translateZ++;
+			// 	img.style.transform = generateTransform();
+			// },
 
-			zoomOut: function () {
-				translateZ--;
-				img.style.transform = generateTransform();
+			// zoomOut: function () {
+			// 	translateZ--;
+			// 	img.style.transform = generateTransform();
+			// },
+
+			zoom: function (z) {
+				translateZ = z;
+				var target = img.length? img[0]: img;
+				target.style.transform = generateTransform();
 			},
 
 			translate: function (x, y) {
@@ -107,9 +113,9 @@ define (function () {
 				target.style.transform = generateTransform();
 			},
 
-			rotateOn3d: function () {
+			// rotateOn3d: function () {
 				
-			}
+			// }
 		},
 
 		/**
