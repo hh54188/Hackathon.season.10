@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grab Demo</title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<style type="text/css">
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			perspective: 1000px;
+			height: 100%;
+		}
+		.shadow {
+			box-shadow: 0 0 30px black;
+		}
+
+		img {
+			position:absolute;
+			top:50%;
+			left:50%;
+			margin-top: -129px;
+			margin-left: -270px;
+
+			transform-style: preserve-3d;
+			transition: all .1s;
+		}
+
+	</style>
+</head>
+<body>
+	<img src="http://www.baidu.com/img/bdlogo.png">
+	<script type="text/javascript">
+
+		var controller = new Leap.Controller();
+		var img = document.querySelector("img");
+		var translateX = 0;
+		var translateY = 0;
+		var translateZ = 0;
+		var TIMES = 2; // 移动位移倍数
+
+		controller.on("frame", function (frame) {
+
+			var interactionBox = frame.interactionBox;
+
+			if (frame.hands.length) {
+
+				var rightHand = frame.hands[0];
+				if (rightHand.type == "left") {
+					return;
+				}
+
+				if (rightHand.grabStrength != 0) {
+					img.classList.remove("shadow");
+					return;
+				}
+
+				if (rightHand.grabStrength == 0) {
+					img.classList.add("shadow");
+				}
+
+				var previousFrame = controller.frame(1);
+				var movement = rightHand.translation(previousFrame);
+
+				var deltaX = movement[0];
+				var deltaY = movement[1];
+				var deltaZ = movement[2];
+
+				translateX += deltaX;
+				translateY -= deltaY;
+				translateZ += deltaZ;
+
+				img.style.transform = "translateX(" + translateX * TIMES + "px) "
+										 + "translateY(" + translateY * TIMES + "px) " 
+										 + "translateZ(" + translateZ * TIMES + "px)";
+			}
+
+		});
+
+		controller.connect();
+	</script>		
+</body>
+</html>
