@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+
+</head>
+<body>
+	<script type="text/javascript">
+		var controller = new Leap.Controller();
+
+		function compute (a, b) {
+			var up = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+			var down = Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]) * Math.sqrt(b[0] * b[0] + b[1] * b[1] + b[2] * b[2]);
+
+			var cos = Math.acos(up / down);
+
+			var angle = (cos / Math.PI) * 180;
+
+			console.log(angle);
+		}
+
+		controller.on("frame", function (frame) {
+
+			var interactionBox = frame.interactionBox;
+
+			if (frame.hands.length) {
+
+				var rightHand = frame.hands[0];
+				if (rightHand.type == "left") {
+					return;
+				}
+
+				var palmNormal = rightHand.palmNormal;
+				compute(palmNormal, [0,0,1]);
+			}
+		});
+
+		controller.connect();
+	</script>
+</body>
+</html>

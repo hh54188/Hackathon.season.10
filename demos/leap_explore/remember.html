@@ -39,6 +39,7 @@
 		var translateX = 0;
 		var translateY = 0;
 		var translateZ = 0;
+		var rotateZ = 0;
 		var TIMES = 2; // 移动位移倍数
 
 		controller.on("frame", function (frame) {
@@ -63,6 +64,7 @@
 
 				var previousFrame = controller.frame(1);
 				var movement = rightHand.translation(previousFrame);
+				var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
 
 				var deltaX = movement[0];
 				var deltaY = movement[1];
@@ -71,10 +73,12 @@
 				translateX += deltaX;
 				translateY -= deltaY;
 				translateZ += deltaZ;
+				// rotateZ += rotationAroundZAxis;
 
 				img.style.transform = "translateX(" + translateX * TIMES + "px) "
 										 + "translateY(" + translateY * TIMES + "px) " 
-										 + "translateZ(" + translateZ * TIMES + "px)";
+										 + "translateZ(" + translateZ * TIMES + "px) "
+										 + "rotateZ(" + rotateZ + "deg)";
 			}
 
 		});
