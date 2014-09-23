@@ -10,7 +10,10 @@
 		var controller = new Leap.Controller();
 
 		function compute (a, b) {
+			// 可以改写为vec3版本
+			// 可以改写为Leap.vec3.mul([],a,b)
 			var up = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+			// 分母实际上为两个向量的模相乘，但我不知道哪个vec3的哪一个方法是用来取模的Math.len([],a,b)
 			var down = Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]) * Math.sqrt(b[0] * b[0] + b[1] * b[1] + b[2] * b[2]);
 
 			var cos = Math.acos(up / down);
