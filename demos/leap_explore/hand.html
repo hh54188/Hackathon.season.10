@@ -29,16 +29,19 @@
 				var previousFrame = controller.frame(1);
 
 				// roll()
-				// console.log(rightHand.roll(), rightHand.roll() * 360);
+				// console.log((rightHand.roll() / Math.PI) * 180); // 算出的是总的偏移量，并非增量
 				
 				// rotationAngle(sinceFrame[, axis])??? 还是不会用
 				// var totalRotation = rightHand.rotationAngle(previousFrame);
 				// var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
-				// console.log(", Z Rot:" + rotationAroundZAxis);
+				// console.log((rotationAroundZAxis / Math.PI) * 180);
 
+				function computeAngle (radians) {
+					return (radians / Math.PI) * 180;
+				}
 
-				// var axis = rightHand.rotationAxis(previousFrame);
-				// console.log("Axis of Rotation: (" + axis[0] + ", " + axis[1] + ", " + axis[2] + ")");
+				var axis = rightHand.rotationAxis(previousFrame);
+				console.log("Axis of Rotation: (" + computeAngle(axis[0])  + ", " + computeAngle(axis[1])  + ", " + computeAngle(axis[2])  + ")");
 
 
 				
@@ -102,8 +105,8 @@
 
 
 				// SCALE ???
-				var scale = rightHand.scaleFactor(controller.frame(3));
-				console.log("SCALE:", scale);
+				// var scale = rightHand.scaleFactor(controller.frame(3));
+				// console.log("SCALE:", scale);
 				
 
 				// ROTATION ???				 

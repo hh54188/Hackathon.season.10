@@ -8,20 +8,18 @@
 <body>
 	<script type="text/javascript">
 		var controller = new Leap.Controller();
+		var previousDirection;
 
 		function compute (a, b) {
 			
 			// 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
-			var cos = Math.acos(Leap.vec3.dot(a, b); / (Leap.vec3.len(a) * Leap.vec3.len(b)));
-
+			var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b)));
 			var angle = (cos / Math.PI) * 180;
 
 			console.log(angle);
 		}
 
 		controller.on("frame", function (frame) {
-
-			var interactionBox = frame.interactionBox;
 
 			if (frame.hands.length) {
 
@@ -30,8 +28,14 @@
 					return;
 				}
 
-				var palmNormal = rightHand.palmNormal;
-				compute(palmNormal, [0,0,1]);
+				var direction = rightHand.direction;
+				if (!previousDirection) {
+					previousDirection = direction;
+					return;
+				}
+
+				compute(previousDirection, direction);
+				previousDirection = direction;
 			}
 		});
 
