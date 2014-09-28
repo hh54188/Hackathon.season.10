@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Grab Demo</title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<style type="text/css">
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			perspective: 1000px;
+			height: 100%;
+		}
+		.shadow {
+			box-shadow: 0 0 30px black;
+		}
+
+		img {
+			position:absolute;
+			top:50%;
+			left:50%;
+			margin-top: -129px;
+			margin-left: -270px;
+
+			transform-style: preserve-3d;
+			transition: all .1s;
+		}
+
+	</style>
+</head>
+<body>
+	<img src="http://www.baidu.com/img/bdlogo.png">
+	<script type="text/javascript">
+
+		var controller = new Leap.Controller();
+		var img = document.querySelector("img");
+
+		var thumb, index, middle, ring, pinky;
+
+		function compute (a, b) {
+			// 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
+			var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b)));
+			var angle = (cos / Math.PI) * 180;
+
+			return angle;
+		}
+		// 如果想保住手指折叠，
+		// position肯定是不行的
+		// 只能依靠方向
+		controller.on("frame", function (frame) {
+
+			var interactionBox = frame.interactionBox;
+
+			if (frame.hands.length) {
+
+				var rightHand = frame.hands[0];
+				var fingers = rightHand.fingers;
+
+				thumb = fingers[0];
+				index = fingers[1];
+				middle = fingers[2];
+				ring = fingers[3];
+				pinky = fingers[4];
+
+				var thumbAngle = compute(thumb.direction, [0, -1, 0]);
+				var indexAngle = compute(index.direction, [0, -1, 0]);
+				var middleAngle = compute(middle.direction, [0, -1, 0]);
+				var ringAngle = compute(ring.direction, [0, -1, 0]);
+				var pinkyAngle = compute(pinky.direction, [0, -1, 0]);
+
+
+				if (Math.abs(90 - thumbAngle) < 20
+					&& Math.abs(90 - indexAngle) < 20
+					&& middleAngle < 30
+					&& ringAngle < 30
+					&& Math.abs(90 - pinkyAngle) < 20
+					) {
+
+					console.log("Recognized!");
+				}
+
+			}
+
+		});
+
+		controller.connect();
+	</script>		
+</body>
+</html>
