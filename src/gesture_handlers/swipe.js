@@ -87,7 +87,7 @@ define(["../apis/image"], function (ImageAPI) {
 		
 		// 然后调用对应的API，这里采用观察者模式
 		// 因为一个手势可能对应多个API
-		
+		3
 		// 最后再重置标志位，
 		// 但这里有一个问题是，
 		// 动画是有时间过程的(最好是在动画结束的回调里重置标志位)
@@ -109,7 +109,7 @@ define(["../apis/image"], function (ImageAPI) {
 		if (gesture.type != "swipe") {
 			return;
 		}
-
+        // 为了更加灵敏，是不是应该把stop去掉？
 		if (gesture.state == "stop" && _checkActionInterval()) {		
 			onProcessing = true;
 			_callback(gesture);
