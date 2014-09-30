@@ -1,4 +1,6 @@
-define(["../apis/image"], function (ImageAPI) {
+define(["../apis/image",
+        "../apis/notify"], 
+function (ImageAPI, Notify) {
     
     function compute (a, b) {
         // 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
@@ -40,20 +42,19 @@ define(["../apis/image"], function (ImageAPI) {
             var angle = compute(palmNormal, [0,-1,0]);
 
             if (Math.abs(angle - 90) > 30) {
-                // Trigger lose signal
                 return;
             }
 
 
             if (rightHand.grabStrength != 0) {
-                img.classList.remove("shadow");
-                // Trigger lose signal
                 return;
             }
 
             if (rightHand.grabStrength == 0) {
-                img.classList.add("shadow");
+                // Add some class
             }
+
+            Notify.log("Translate Gesture Recognized!");
 
             var previousFrame = controller.frame(1);
             var movement = rightHand.translation(previousFrame);
@@ -64,6 +65,8 @@ define(["../apis/image"], function (ImageAPI) {
             var deltaZ = movement[2];
 
             ImageAPI.threed.translate(deltaX, deltaY, deltaZ);
+        } else {
+            // Gesture recognized failed!
         }
     }
 
