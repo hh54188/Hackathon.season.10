@@ -62,12 +62,14 @@ define (function () {
 		translateY = 0,
 		translateZ = 0;
 
+	var TRANS_TIMES = 2;
+
 	function generateTransform () {
 
 		return [
-			"translateX(" + translateX + "px)",
-			"translateY(" + translateY + "px)",
-			"translateZ(" + translateZ + "px)",
+			"translateX(" + translateX * TRANS_TIMES + "px)",
+			"translateY(" + translateY * TRANS_TIMES + "px)",
+			"translateZ(" + translateZ * TRANS_TIMES + "px)",
 			"rotateX(" + rotateX + "deg)",
 			"rotateY(" + rotateY + "deg)",
 			"rotateZ(" + rotateZ + "deg)"
@@ -91,31 +93,19 @@ define (function () {
 
 		threed: {
 
-			// zoomIn: function () {
-			// 	translateZ++;
-			// 	img.style.transform = generateTransform();
-			// },
-
-			// zoomOut: function () {
-			// 	translateZ--;
-			// 	img.style.transform = generateTransform();
-			// },
-
-			zoom: function (z) {
-				translateZ = z;
-				var target = img.length? img[0]: img;
-				target.style.transform = generateTransform();
-			},
-
-			translate: function (x, y) {
-				translateX = x, translateY = y;
-				var target = img.length? img[0]: img;
-				target.style.transform = generateTransform();
-			},
-
-			// rotateOn3d: function () {
+			translate: function (deltaX, deltaY, deltaZ) {
 				
-			// }
+				translateX += deltaX;
+				translateY -= deltaY;
+				translateZ += deltaZ;
+
+				var target = img.length? img[0]: img;
+				target.style.transform = generateTransform();
+			},
+
+			rotate: function () {
+				
+			}
 		},
 
 		/**
