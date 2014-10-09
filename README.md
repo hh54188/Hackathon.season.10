@@ -114,9 +114,17 @@ This is a web app which try to using *leap motion* take the place of mouse and k
 
 
 
-## How to build:
+## How to use:
 
-### Using grunt
+### How to use in browser
+
+1. Open Chrome extension manage page
+2. Enable developer mode
+3. Drop extension folder into the page  
+
+### Using grunt to build
+
+(Debug verion build path: "extension/content.js")
 
 1. First instll grunt: `npm install -g grunt-cli`
 2. Install `requirejs`, `uglify`, `concat`: 
@@ -124,9 +132,9 @@ This is a web app which try to using *leap motion* take the place of mouse and k
     - `npm install grunt-contrib-uglify`
     - `npm install grunt-contrib-concat`
 3. If you want to build a debug version run `grunt -v debug`
-4. If you want to build a deploy version run `grunt -v  deploy`
+4. (DO NOT USE!)If you want to build a deploy version run `grunt -v  deploy`
 
-### Using requrejs
+### Using requrejs to build
 
 1. Install `requirejs`: `npm install requirejs`
 2. Copy `./node_modules/requirejs/bin/r.js` to root `./r.js`
