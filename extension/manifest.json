@@ -1,0 +1,20 @@
+{
+    "name": "LeapControl",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "browser_action": {
+        "default_title": "Leap Control Extension",
+        "default_icon": {
+        	"19": "icons/19x19.png",
+            "38": "icons/38x38.png",
+            "48": "icons/48x48.png",
+            "128": "icons/128x128.png"
+        }
+    },    
+    "content_scripts": [
+	    {
+	        "matches": ["http://image.baidu.com/*"],
+	        "js": ["content.js"]
+	    }
+	]
+}
