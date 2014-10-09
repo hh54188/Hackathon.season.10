@@ -15,7 +15,7 @@
 	    {
 	        "matches": ["http://image.baidu.com/*"],
 	        "js": ["content.js"],
-            "run_at": "document_end"
+            "run_at": "document_end" // https://developer.chrome.com/extensions/content_scripts#run_at
 	    }
 	]
 }

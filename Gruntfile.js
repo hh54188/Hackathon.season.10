@@ -2,6 +2,12 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
+        watch: {
+            scripts: {
+                files: ['./src/**/*.js'],
+                tasks: ['debug'],
+            },
+        },
         // pkg: grunt.file.readJSON('package.json'),
         concat: {
             debug: {
@@ -43,6 +49,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
     grunt.registerTask('debug', ['requirejs:debug', 'concat:debug']);

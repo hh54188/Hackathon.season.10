@@ -2166,6 +2166,9 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
         }
     }, GestureRecognitionEngine;
 }), define("apis/image", [], function() {
+    document.addEventListener("DOMContentLoaded", function() {
+        console.log("DOMContentLoaded！");
+    });
     var hasInit = !1;
     if (!hasInit && $ && $("#srcPic") && $(".img-next") && $(".img-prev")) {
         document.body.style.perspective = "1000px";
