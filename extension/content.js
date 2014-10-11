@@ -2166,30 +2166,31 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
         }
     }, GestureRecognitionEngine;
 }), define("apis/image", [], function() {
-    document.addEventListener("DOMContentLoaded", function() {
-        console.log("DOMContentLoaded！");
-    }), window.onload = function() {
-        console.log("onload!"), setTimeout(function() {
-            try {
-                console.log($);
-            } catch (e) {
-                console.log("$ is not ready when onload");
-            }
-        }, 2e3);
+    var $ = document.querySelector, hasInit = !1, doms = {
+        nextBtn: document.querySelector(".img-next"),
+        prevBtn: document.querySelector(".img-prev"),
+        slideNextBtn: document.querySelector(".slider-btn-next"),
+        slidePrevBtn: document.querySelector(".slider-btn-prev"),
+        zoomInBtn: document.querySelector("#btnZoomIn"),
+        zoomOutBtn: document.querySelector("#btnZoomOut"),
+        pullHandler: document.querySelector(".album-handler"),
+        img: document.querySelector("#srcPic img"),
+        ad: document.querySelector("#sider"),
+        header: document.querySelector("#header"),
+        dock: document.querySelector(".album-pnl")
     };
-    var hasInit = !1;
-    if (!hasInit && $ && $("#srcPic") && $(".img-next") && $(".img-prev")) {
-        document.body.style.perspective = "1000px";
-        var imgTarget = $("#srcPic img").length ? $("#srcPic img")[0] : $("#srcPic img");
-        imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", console.log("API INIT CONPLETE"), hasInit = !0;
+    console.log(doms);
+    function check() {
+        for (var el in doms) if (!doms[el]) return !1;
+        return !0;
     }
+    if (!!hasInit || !check()) return !1;
+    document.body.style.perspective = "1000px";
+    var imgTarget = doms.img;
+    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", console.log("API INIT CONPLETE"), hasInit = !0;
     var emptyFn = function() {
         console.log("NO API");
-    }, emptyElement = {
-        isFake: !0,
-        style: {},
-        click: emptyFn
-    }, nextBtn = $(".img-next") || emptyElement, prevBtn = $(".img-prev") || emptyElement, slideNextBtn = $(".slider-btn-next") || emptyElement, slidePrevBtn = $(".slider-btn-prev") || emptyElement, zoomInBtn = $("#btnZoomIn") || emptyElement, zoomOutBtn = $("#btnZoomOut") || emptyElement, pullHandler = $(".album-handler") || emptyElement, img = $("#srcPic img") || emptyElement, ad = $("#sider") || emptyElement, header = $("#header") || emptyElement, dock = $(".album-pnl") || emptyElement, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
+    }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
     function generateTransform() {
         return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
     }
@@ -2200,38 +2201,38 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
         threed: {
             translate: function(deltaX, deltaY, deltaZ) {
                 translateX += deltaX, translateY -= deltaY, translateZ += deltaZ;
-                var target = img.length ? img[0] : img;
+                var target = doms.img;
                 target.style.transform = generateTransform();
             },
             rotate: function() {}
         },
         init: function() {
             var body = document.body;
-            body.style.perspective = "1000px", img.style.transformStyle = "preserve-3d";
+            body.style.perspective = "1000px", doms.img.style.transformStyle = "preserve-3d";
         },
         nextImage: function() {
-            nextBtn.click(), reset(img.length ? img[0] : img);
+            doms.nextBtn.click(), reset(doms.img);
         },
         prevImage: function() {
-            prevBtn.click(), reset(img.length ? img[0] : img);
+            doms.prevBtn.click(), reset(doms.img);
         },
         pullUpDock: function() {
-            pullHandler.click();
+            doms.pullHandler.click();
         },
         pullDownDock: function() {
-            pullHandler.click();
+            doms.pullHandler.click();
         },
         slideToNext: function() {
-            slideNextBtn.click();
+            doms.slideNextBtn.click();
         },
         slideToPrev: function() {
-            slidePrevBtn.click();
+            doms.slidePrevBtn.click();
         },
         zoomIn: function() {
-            zoomInBtn.click();
+            doms.zoomInBtn.click();
         },
         zoomOut: function() {
-            zoomOutBtn.click();
+            doms.zoomOutBtn.click();
         }
     };
 }), window.dhtmlx || (window.dhtmlx = {}), function() {

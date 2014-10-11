@@ -1,59 +1,57 @@
 define (function () {
- 
+
+	var $ = document.querySelector;
 	var hasInit = false;
-	if (!hasInit 
-		&& $ 
-		&& $("#srcPic") 
-		&& $(".img-next") 
-		&& $(".img-prev")) {
+
+	var doms = {
+
+		// 按钮：
+		nextBtn: document.querySelector(".img-next"), // 下一张图片
+		prevBtn: document.querySelector(".img-prev"), // 上一张图片
+		slideNextBtn: document.querySelector(".slider-btn-next"), // 列表下一页
+		slidePrevBtn: document.querySelector(".slider-btn-prev"), // 列表前一页
+		zoomInBtn: document.querySelector("#btnZoomIn"), // 放大
+		zoomOutBtn: document.querySelector("#btnZoomOut"), // 缩小
+		pullHandler: document.querySelector(".album-handler"), // 是否显示列表
+
+		// 容器：
+		img: document.querySelector("#srcPic img"), // 当前显示的图片
+		ad: document.querySelector("#sider"), // 右侧广告栏
+		header: document.querySelector("#header"), // 顶栏
+		dock: document.querySelector(".album-pnl") // 图片列表		
+	}
+
+	console.log(doms);
+	// 检验以上DOM元素是否都存在
+	function check() {
+		for (var el in doms) {
+			if (!doms[el]) {
+				return false;
+				console.log("LACK SOME ELEMENTS");
+			}
+		}
+		return true;
+	}
+
+	// 初始化	
+	if (!hasInit && check()) {
 
 		document.body.style.perspective = "1000px";
-		var imgTarget = $("#srcPic img").length
-			? $("#srcPic img")[0]
-			: $("#srcPic img");
+		var imgTarget = doms.img; 
 
 		imgTarget.style.transformStyle = "preserve-3d";
 		imgTarget.style.transition = "all .1s";
 
 		console.log("API INIT CONPLETE");
 		hasInit = true;
+	} else {
+
+		return false;
 	}
 
 	var emptyFn = function () {
 		console.log("NO API");
 	}
-
-	// if (!window.$) {
-	// 	window.$ = emptyFn;
-	// } 
-
-
-	var emptyElement = {
-		isFake: true,
-		style: {},
-		click: emptyFn
-	}
-
-	// 按钮：
-
-	var nextBtn = $(".img-next") || emptyElement; // 下一张图片
-	var prevBtn = $(".img-prev") || emptyElement; // 上一张图片
-
-	var slideNextBtn = $(".slider-btn-next") || emptyElement; // 列表下一页
-	var slidePrevBtn = $(".slider-btn-prev") || emptyElement; // 列表前一页
-
-	var zoomInBtn = $("#btnZoomIn") || emptyElement; // 放大
-	var zoomOutBtn = $("#btnZoomOut") || emptyElement; // 缩小
-
-	var pullHandler = $(".album-handler") || emptyElement; // 是否显示列表
-
-	// 容器：
-
-	var img = $("#srcPic img") || emptyElement; // 当前显示的图片
-	var ad = $("#sider") || emptyElement; // 右侧广告栏
-	var header = $("#header") || emptyElement; // 顶栏
-	var dock = $(".album-pnl") || emptyElement; // 图片列表
-
 
 	var rotateX = 0,
 		rotateY = 0,
@@ -99,7 +97,7 @@ define (function () {
 				translateY -= deltaY;
 				translateZ += deltaZ;
 
-				var target = img.length? img[0]: img;
+				var target = doms.img;
 				target.style.transform = generateTransform();
 			},
 
@@ -114,65 +112,65 @@ define (function () {
 		init: function () {
 			var body = document.body;
 			body.style.perspective = "1000px";
-			img.style.transformStyle = "preserve-3d";
+			doms.img.style.transformStyle = "preserve-3d";
 		},
 
 		/**
 		 * 切换至下一张图片
 		 */
 		nextImage: function () {
-			nextBtn.click();
-			reset(img.length? img[0]: img);
+			doms.nextBtn.click();
+			reset(doms.img);
 		},
 		
 		/**
 		 * 切换至前一张图片
 		 */
 		prevImage: function () {
-			prevBtn.click();
-			reset(img.length? img[0]: img);
+			doms.prevBtn.click();
+			reset(doms.img);
 		},
 
 		/**
 		 * 拉起列表
 		 */
 		pullUpDock: function () {
-			pullHandler.click();
+			doms.pullHandler.click();
 		},
 
 		/**
 		 * 收起列表
 		 */
 		pullDownDock: function () {
-			pullHandler.click();
+			doms.pullHandler.click();
 		},
 
 		/**
 		 * 列表下一页
 		 */
 		slideToNext: function () {
-			slideNextBtn.click();
+			doms.slideNextBtn.click();
 		},
 
 		/**
 		 * 列表前一页
 		 */
 		slideToPrev: function () {
-			slidePrevBtn.click();
+			doms.slidePrevBtn.click();
 		},
 
 		/**
 		 * 放大
 		 */
 		zoomIn: function () {
-			zoomInBtn.click();
+			doms.zoomInBtn.click();
 		},
 
 		/**
 		 * 缩小
 		 */
 		zoomOut: function () {
-			zoomOutBtn.click();
+			doms.zoomOutBtn.click();
 		}
 	}
 });
