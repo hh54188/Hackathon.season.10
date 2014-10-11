@@ -1,13 +1,12 @@
 requirejs.config({
     baseUrl: "./src/"
 });
- 
+
 require(
     [
         "./gesture_engine/engine", 
         "./gesture_handlers/swipe",
-        "./gesture_handlers/translate",
-        "./gesture_handlers/scale"
+        "./gesture_handlers/translate"
     ], function (
         Engine, 
         swipeHandler,

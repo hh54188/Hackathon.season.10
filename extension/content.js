@@ -2168,7 +2168,15 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
 }), define("apis/image", [], function() {
     document.addEventListener("DOMContentLoaded", function() {
         console.log("DOMContentLoaded！");
-    });
+    }), window.onload = function() {
+        console.log("onload!"), setTimeout(function() {
+            try {
+                console.log($);
+            } catch (e) {
+                console.log("$ is not ready when onload");
+            }
+        }, 2e3);
+    };
     var hasInit = !1;
     if (!hasInit && $ && $("#srcPic") && $(".img-next") && $(".img-prev")) {
         document.body.style.perspective = "1000px";
@@ -2404,18 +2412,9 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
         }
     }
     return entry;
-}), define("gesture_handlers/scale", [ "../apis/image" ], function(ImageAPI) {
-    function entry(controller, frame) {
-        if (!controller) return;
-        var rightHand = frame.hands[0];
-        if (rightHand.type == "left") return;
-        var interactionBox = frame.interactionBox, normalizedPosition = interactionBox.normalizePoint(rightHand.palmPosition, !0), MAX_SCALE = 1e3;
-        ImageAPI.threed.zoom((normalizedPosition[2] - .5) * MAX_SCALE);
-    }
-    return entry;
 }), requirejs.config({
     baseUrl: "./src/"
-}), require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/scale" ], function(Engine, swipeHandler, translateHandler, scaleHandler) {
+}), require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate" ], function(Engine, swipeHandler, translateHandler, scaleHandler) {
     if (!window.Leap) return;
     var controller = new Leap.Controller({
         enableGestures: !0

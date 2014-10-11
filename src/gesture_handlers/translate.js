@@ -1,5 +1,6 @@
 define(["../apis/image",
-        "../apis/notify"], 
+        "../apis/notify"/*, 
+        "../apis/crop"*/], 
 function (ImageAPI, Notify) {
 
     var leftHand, rightHand;

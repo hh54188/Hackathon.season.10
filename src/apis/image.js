@@ -1,18 +1,4 @@
 define (function () {
-      
-	// console.log("$ is not here", $);
-	document.addEventListener("DOMContentLoaded", function () {
-		console.log("DOMContentLoaded！");
-	});
-
-	// window.onload = function () {
-	// 	console.log("onload!");
-	// 	try {
-	// 		console.log($);
-	// 	} catch (e) {
-	// 		console.log("$ is not ready when onload");
-	// 	}
-	// }
  
 	var hasInit = false;
 	if (!hasInit 
