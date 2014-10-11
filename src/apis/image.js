@@ -21,7 +21,6 @@ define (function () {
 		dock: document.querySelector(".album-pnl") // 图片列表		
 	}
 
-	console.log(doms);
 	// 检验以上DOM元素是否都存在
 	function check() {
 		for (var el in doms) {

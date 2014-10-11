@@ -1,4 +1,6 @@
-define (["../lib/message"], function () {
+define ([
+	"../lib/message",
+	"../lib/jQuery"], function () {
 
 	function injectStyle () {
 		var head = document.head;
