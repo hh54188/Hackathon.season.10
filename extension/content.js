@@ -2107,6 +2107,28 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         }
         return !1;
     }, TranslateGesture;
+}), define("gesture_engine/gestures/RiseDockGesture", [], function() {
+    var rightHand, leftHand, prevRightHand, prevLeftHand;
+    function computeAngle(a, b) {
+        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
+        return angle;
+    }
+    function getHands(frame) {
+        var hands = {};
+        return frame.hands[0].type == "right" ? (hands.rightHand = frame.hands[0], hands.leftHand = frame.hands[1]) : (hands.rightHand = frame.hands[1], hands.leftHand = frame.hands[0]), hands;
+    }
+    function RiseDockGesture() {}
+    return RiseDockGesture.prototype.validate = function(controller, frame) {
+        if (!controller) return !1;
+        if (frame.hands.length && frame.hands.length == 2) {
+            rightHand = getHands(frame).rightHand, leftHand = getHands(frame).leftHand;
+            var previousFrame = controller.frame(10);
+            if (!previousFrame.hands.length || previousFrame.hands.length != 2) return !1;
+            prevRightHand = getHands(previousFrame).rightHand, prevLeftHand = getHands(previousFrame).leftHand;
+            if (rightHand.palmPosition[1] > prevRightHand.palmPosition[1]) return !0;
+        }
+        return !1;
+    }, RiseDockGesture;
 });
 
 var toArray = function(arguments) {
@@ -2119,7 +2141,7 @@ var toArray = function(arguments) {
     return Object.prototype.toString.call(str) == "[object String]" ? !0 : !1;
 };
 
-define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(TranslateGesture) {
+define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture" ], function(TranslateGesture) {
     var nativeGestureTypes = [ "circle", "keyTap", "screenTap", "swipe" ], gestures = function GestureValidate(gestures) {
         var result = {}, matchName = /(\w+)Gesture/;
         return toArray(gestures).forEach(function(Gesture) {
@@ -5510,15 +5532,20 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(Tran
         }
     }
     return entry;
+}), define("gesture_handlers/risedock", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
+    function entry() {
+        console.log("RISE DOCK!");
+    }
+    return entry;
 }), requirejs.config({
     baseUrl: "./src/"
-}), require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate" ], function(Engine, swipeHandler, translateHandler) {
+}), require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock" ], function(Engine, swipeHandler, translateHandler, risedockHandler) {
     if (!window.Leap) return;
     var controller = new Leap.Controller({
         enableGestures: !0
     }), engine;
     controller.on("connect", function() {
-        engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler);
+        engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler);
     }), controller.on("gesture", function(gesture, frame) {
         engine.gestureHappened(gesture, frame);
     }), controller.on("frame", function(frame) {
