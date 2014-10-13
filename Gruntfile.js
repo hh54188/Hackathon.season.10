@@ -6,6 +6,7 @@ module.exports = function(grunt) {
             scripts: {
                 files: ['./src/**/*.js'],
                 tasks: ['debug'],
+                options : { verbose : true }
             },
         },
         // pkg: grunt.file.readJSON('package.json'),

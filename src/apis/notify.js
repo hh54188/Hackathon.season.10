@@ -1,6 +1,6 @@
 define ([
-	"../lib/message",
-	"../lib/jQuery"], function () {
+	"../lib/message"
+], function () {
 
 	function injectStyle () {
 		var head = document.head;
