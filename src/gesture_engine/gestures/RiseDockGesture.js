@@ -36,6 +36,7 @@ define(function () {
 
 		if (!controller) return false;
 
+		// 验证条件：必须存在双手
 		if (frame.hands.length && frame.hands.length == 2) {
 
 			rightHand = getHands(frame).rightHand;
@@ -48,7 +49,14 @@ define(function () {
 			prevRightHand = getHands(previousFrame).rightHand;
 			prevLeftHand = getHands(previousFrame).leftHand;
 
-			if (rightHand.palmPosition[1] > prevRightHand.palmPosition[1]) {
+			// 验证条件：右手高度必须高于前十帧
+			if ((rightHand.palmPosition[1] > prevRightHand.palmPosition[1])
+				// 验证条件：左手高度必须高于前十帧
+				&& (leftHand.palmPosition[1] > prevLeftHand.palmPosition[1])
+				// 验证条件：双手手掌朝下
+				&& Math.abs(computeAngle(leftHand.palmNormal, [0,-1,0])) < 20
+				&& Math.abs(computeAngle(rightHand.palmNormal, [0,-1,0])) < 20
+				) {
 				return true;
 			}
 

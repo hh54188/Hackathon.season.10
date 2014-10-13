@@ -1,4 +1,4 @@
-define (function () {
+define (["./notify"], function (Notify) {
 
 	var $ = document.querySelector;
 	var hasInit = false;
@@ -41,10 +41,12 @@ define (function () {
 		imgTarget.style.transformStyle = "preserve-3d";
 		imgTarget.style.transition = "all .1s";
 
+		Notify.log("初始化完成");
 		console.log("API INIT CONPLETE");
 		hasInit = true;
 	} else {
-
+		Notify.log("初始化失败");
+		console.log("API INIT FAILED");
 		return false;
 	}
 
@@ -82,7 +84,7 @@ define (function () {
 		translateY = 0,
 		translateZ = 0;
 
-		target.style.transition = "all .1s";
+		// target.style.transition = "all .1s";
 		target.style.transform = generateTransform(); 
 	}
 

@@ -2123,7 +2123,7 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
             var previousFrame = controller.frame(10);
             if (!previousFrame.hands.length || previousFrame.hands.length != 2) return !1;
             prevRightHand = getHands(previousFrame).rightHand, prevLeftHand = getHands(previousFrame).leftHand;
-            if (rightHand.palmPosition[1] > prevRightHand.palmPosition[1]) return !0;
+            if (rightHand.palmPosition[1] > prevRightHand.palmPosition[1] && leftHand.palmPosition[1] > prevLeftHand.palmPosition[1] && Math.abs(computeAngle(leftHand.palmNormal, [ 0, -1, 0 ])) < 20 && Math.abs(computeAngle(rightHand.palmNormal, [ 0, -1, 0 ])) < 20) return !0;
         }
         return !1;
     }, RiseDockGesture;
@@ -2187,75 +2187,6 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
             this._checkGesture(frame);
         }
     }, GestureRecognitionEngine;
-}), define("apis/image", [], function() {
-    var $ = document.querySelector, hasInit = !1, doms = {
-        nextBtn: document.querySelector(".img-next"),
-        prevBtn: document.querySelector(".img-prev"),
-        slideNextBtn: document.querySelector(".slider-btn-next"),
-        slidePrevBtn: document.querySelector(".slider-btn-prev"),
-        zoomInBtn: document.querySelector("#btnZoomIn"),
-        zoomOutBtn: document.querySelector("#btnZoomOut"),
-        pullHandler: document.querySelector(".album-handler"),
-        img: document.querySelector("#srcPic img"),
-        ad: document.querySelector("#sider"),
-        header: document.querySelector("#header"),
-        dock: document.querySelector(".album-pnl")
-    };
-    function check() {
-        for (var el in doms) if (!doms[el]) return !1;
-        return !0;
-    }
-    if (!!hasInit || !check()) return !1;
-    document.body.style.perspective = "1000px";
-    var imgTarget = doms.img;
-    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", console.log("API INIT CONPLETE"), hasInit = !0;
-    var emptyFn = function() {
-        console.log("NO API");
-    }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
-    function generateTransform() {
-        return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
-    }
-    function reset(target) {
-        rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, target.style.transition = "all .1s", target.style.transform = generateTransform();
-    }
-    return {
-        threed: {
-            translate: function(deltaX, deltaY, deltaZ) {
-                translateX += deltaX, translateY -= deltaY, translateZ += deltaZ;
-                var target = doms.img;
-                target.style.transform = generateTransform();
-            },
-            rotate: function() {}
-        },
-        init: function() {
-            var body = document.body;
-            body.style.perspective = "1000px", doms.img.style.transformStyle = "preserve-3d";
-        },
-        nextImage: function() {
-            doms.nextBtn.click(), reset(doms.img);
-        },
-        prevImage: function() {
-            doms.prevBtn.click(), reset(doms.img);
-        },
-        pullUpDock: function() {
-            doms.pullHandler.click();
-        },
-        pullDownDock: function() {
-            doms.pullHandler.click();
-        },
-        slideToNext: function() {
-            doms.slideNextBtn.click();
-        },
-        slideToPrev: function() {
-            doms.slidePrevBtn.click();
-        },
-        zoomIn: function() {
-            doms.zoomInBtn.click();
-        },
-        zoomOut: function() {
-            doms.zoomOutBtn.click();
-        }
-    };
 }), window.dhtmlx || (window.dhtmlx = {}), function() {
     var _dhx_msg_cfg = null;
     function callback(config, result) {
@@ -2388,10 +2319,79 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
             dhtmlx.message(msg);
         }
     };
+}), define("apis/image", [ "./notify" ], function(Notify) {
+    var $ = document.querySelector, hasInit = !1, doms = {
+        nextBtn: document.querySelector(".img-next"),
+        prevBtn: document.querySelector(".img-prev"),
+        slideNextBtn: document.querySelector(".slider-btn-next"),
+        slidePrevBtn: document.querySelector(".slider-btn-prev"),
+        zoomInBtn: document.querySelector("#btnZoomIn"),
+        zoomOutBtn: document.querySelector("#btnZoomOut"),
+        pullHandler: document.querySelector(".album-handler"),
+        img: document.querySelector("#srcPic img"),
+        ad: document.querySelector("#sider"),
+        header: document.querySelector("#header"),
+        dock: document.querySelector(".album-pnl")
+    };
+    function check() {
+        for (var el in doms) if (!doms[el]) return !1;
+        return !0;
+    }
+    if (!!hasInit || !check()) return Notify.log("初始化失败"), console.log("API INIT FAILED"), !1;
+    document.body.style.perspective = "1000px";
+    var imgTarget = doms.img;
+    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", Notify.log("初始化完成"), console.log("API INIT CONPLETE"), hasInit = !0;
+    var emptyFn = function() {
+        console.log("NO API");
+    }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
+    function generateTransform() {
+        return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
+    }
+    function reset(target) {
+        rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, target.style.transform = generateTransform();
+    }
+    return {
+        threed: {
+            translate: function(deltaX, deltaY, deltaZ) {
+                translateX += deltaX, translateY -= deltaY, translateZ += deltaZ;
+                var target = doms.img;
+                target.style.transform = generateTransform();
+            },
+            rotate: function() {}
+        },
+        init: function() {
+            var body = document.body;
+            body.style.perspective = "1000px", doms.img.style.transformStyle = "preserve-3d";
+        },
+        nextImage: function() {
+            doms.nextBtn.click(), reset(doms.img);
+        },
+        prevImage: function() {
+            doms.prevBtn.click(), reset(doms.img);
+        },
+        pullUpDock: function() {
+            doms.pullHandler.click();
+        },
+        pullDownDock: function() {
+            doms.pullHandler.click();
+        },
+        slideToNext: function() {
+            doms.slideNextBtn.click();
+        },
+        slideToPrev: function() {
+            doms.slidePrevBtn.click();
+        },
+        zoomIn: function() {
+            doms.zoomInBtn.click();
+        },
+        zoomOut: function() {
+            doms.zoomOutBtn.click();
+        }
+    };
 }), define("gesture_handlers/swipe", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
-    var onProcessing = !1, lastActionTimestamp = 0, actionInteral = 300, directionObserver = {
-        right: [ ImageAPI.nextImage ],
-        left: [ ImageAPI.prevImage ],
+    var onProcessing = !1, lastActionTimestamp = 0, actionInteral = 500, directionObserver = {
+        right: [ ImageAPI.prevImage ],
+        left: [ ImageAPI.nextImage ],
         up: [],
         down: []
     };
@@ -2400,7 +2400,7 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
     }
     function _dispatchAPI(direction) {
         directionObserver[direction].forEach(function(fn) {
-            fn();
+            fn && fn();
         });
     }
     function _computeDirection(gesture) {
@@ -2441,20 +2441,22 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
     return entry;
 }), requirejs.config({
     baseUrl: "./src/"
-}), require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock" ], function(Engine, swipeHandler, translateHandler, risedockHandler) {
-    if (!window.Leap) return;
-    var controller = new Leap.Controller({
-        enableGestures: !0
-    }), engine;
-    controller.on("connect", function() {
-        engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler);
-    }), controller.on("gesture", function(gesture, frame) {
-        engine.gestureHappened(gesture, frame);
-    }), controller.on("frame", function(frame) {
-        engine.frameHappened(frame);
-    }), controller.on("disconnect", function() {
-        console.error("disconnect");
-    }), controller.on("deviceDisconnected", function() {
-        console.error("deviceDisconnected");
-    }), controller.connect();
-}), define("main", function() {});;
+}), window.onload = function() {
+    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock" ], function(Engine, swipeHandler, translateHandler, risedockHandler) {
+        if (!window.Leap) return;
+        var controller = new Leap.Controller({
+            enableGestures: !0
+        }), engine;
+        controller.on("connect", function() {
+            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler);
+        }), controller.on("gesture", function(gesture, frame) {
+            engine.gestureHappened(gesture, frame);
+        }), controller.on("frame", function(frame) {
+            engine.frameHappened(frame);
+        }), controller.on("disconnect", function() {
+            console.error("disconnect");
+        }), controller.on("deviceDisconnected", function() {
+            console.error("deviceDisconnected");
+        }), controller.connect();
+    });
+}, define("main", function() {});;

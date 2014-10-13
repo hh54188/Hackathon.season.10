@@ -27,11 +27,11 @@ define(["../apis/image", "../apis/notify"], function (ImageAPI, Notify) {
 	// 那么需要通过触发时间间隔来控制
 	// 在测试之前先保留
 	var lastActionTimestamp = 0;
-	var actionInteral = 300 * 1;
+	var actionInteral = 500 * 1;
 
 	var directionObserver = {
-		right: [ImageAPI.nextImage],
-		left: [ImageAPI.prevImage],
+		right: [ImageAPI.prevImage],  
+		left: [ImageAPI.nextImage], 
 		up: [],
 		down: []
 	};
@@ -44,7 +44,9 @@ define(["../apis/image", "../apis/notify"], function (ImageAPI, Notify) {
 
 	function _dispatchAPI (direction) {
 		directionObserver[direction].forEach(function (fn) {
-			fn();
+			if (fn) {
+				fn();
+			}
 		});
 	}
 
@@ -99,8 +101,7 @@ define(["../apis/image", "../apis/notify"], function (ImageAPI, Notify) {
 
 		var curFrame = frame;
 
-		// 按道理来说不应该会出现取出当前帧之后却发现没有任何手势
-		// 这个问题以后再解决
+		// 如果还在响应当前手势，或者当前帧没有手势，则返回
 		if (onProcessing || !curFrame.gestures || !curFrame.gestures.length) {
 			return
 		}
@@ -109,8 +110,8 @@ define(["../apis/image", "../apis/notify"], function (ImageAPI, Notify) {
 		if (gesture.type != "swipe") {
 			return;
 		}
-        // 为了更加灵敏，是不是应该把stop去掉？
-		if (_checkActionInterval()) {		
+
+		if (_checkActionInterval()) {
 			onProcessing = true;
 			_callback(gesture);
 		}
