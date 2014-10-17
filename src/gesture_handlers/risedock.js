@@ -3,7 +3,8 @@ define(["../apis/image",
 function (ImageAPI, Notify) {
 
 	function entry () {
-		console.log("RISE DOCK!");
+		console.debug("DOCK RISE");
+		ImageAPI.pullUpDock();
 	}
 
 	return entry;

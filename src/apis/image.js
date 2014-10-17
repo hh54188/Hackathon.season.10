@@ -26,7 +26,7 @@ define (["./notify"], function (Notify) {
 		for (var el in doms) {
 			if (!doms[el]) {
 				return false;
-				console.log("LACK SOME ELEMENTS");
+				console.debug("LACK SOME ELEMENTS");
 			}
 		}
 		return true;
@@ -42,16 +42,16 @@ define (["./notify"], function (Notify) {
 		imgTarget.style.transition = "all .1s";
 
 		Notify.log("初始化完成");
-		console.log("API INIT CONPLETE");
+		console.debug("API INIT CONPLETE");
 		hasInit = true;
 	} else {
 		Notify.log("初始化失败");
-		console.log("API INIT FAILED");
+		console.debug("API INIT FAILED");
 		return false;
 	}
 
 	var emptyFn = function () {
-		console.log("NO API");
+		console.debug("NO API");
 	}
 
 	var rotateX = 0,

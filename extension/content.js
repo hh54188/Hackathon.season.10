@@ -2105,28 +2105,6 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         }
         return !1;
     }, TranslateGesture;
-}), define("gesture_engine/gestures/RiseDockGesture", [], function() {
-    var rightHand, leftHand, prevRightHand, prevLeftHand;
-    function computeAngle(a, b) {
-        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
-        return angle;
-    }
-    function getHands(frame) {
-        var hands = {};
-        return frame.hands[0].type == "right" ? (hands.rightHand = frame.hands[0], hands.leftHand = frame.hands[1]) : (hands.rightHand = frame.hands[1], hands.leftHand = frame.hands[0]), hands;
-    }
-    function RiseDockGesture() {}
-    return RiseDockGesture.prototype.validate = function(controller, frame) {
-        if (!controller) return !1;
-        if (frame.hands.length && frame.hands.length == 2) {
-            rightHand = getHands(frame).rightHand, leftHand = getHands(frame).leftHand;
-            var previousFrame = controller.frame(10);
-            if (!previousFrame.hands.length || previousFrame.hands.length != 2) return !1;
-            prevRightHand = getHands(previousFrame).rightHand, prevLeftHand = getHands(previousFrame).leftHand;
-            if (rightHand.palmPosition[1] > prevRightHand.palmPosition[1] && leftHand.palmPosition[1] > prevLeftHand.palmPosition[1] && Math.abs(computeAngle(leftHand.palmNormal, [ 0, -1, 0 ])) < 20 && Math.abs(computeAngle(rightHand.palmNormal, [ 0, -1, 0 ])) < 20) return !0;
-        }
-        return !1;
-    }, RiseDockGesture;
 });
 
 var toArray = function(arguments) {
@@ -2139,7 +2117,7 @@ var toArray = function(arguments) {
     return Object.prototype.toString.call(str) == "[object String]" ? !0 : !1;
 };
 
-define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture" ], function(TranslateGesture) {
+define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(TranslateGesture) {
     var nativeGestureTypes = [ "circle", "keyTap", "screenTap", "swipe" ], gestures = function GestureValidate(gestures) {
         var result = {}, matchName = /(\w+)Gesture/;
         return toArray(gestures).forEach(function(Gesture) {
@@ -2337,12 +2315,12 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         for (var el in doms) if (!doms[el]) return !1;
         return !0;
     }
-    if (!!hasInit || !check()) return Notify.log("初始化失败"), console.log("API INIT FAILED"), !1;
+    if (!!hasInit || !check()) return Notify.log("初始化失败"), console.debug("API INIT FAILED"), !1;
     document.body.style.perspective = "1000px";
     var imgTarget = doms.img;
-    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", Notify.log("初始化完成"), console.log("API INIT CONPLETE"), hasInit = !0;
+    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", Notify.log("初始化完成"), console.debug("API INIT CONPLETE"), hasInit = !0;
     var emptyFn = function() {
-        console.log("NO API");
+        console.debug("NO API");
     }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
     function generateTransform() {
         return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
@@ -2436,7 +2414,7 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
     return entry;
 }), define("gesture_handlers/risedock", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
     function entry() {
-        console.log("RISE DOCK!");
+        console.debug("DOCK RISE"), ImageAPI.pullUpDock();
     }
     return entry;
 }), requirejs.config({

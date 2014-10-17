@@ -2,6 +2,21 @@ define(function () {
 
 	var rightHand, leftHand;
 	var prevRightHand, prevLeftHand;
+	var lastTimestamp = 0;
+	var MAX_INTERVAL = 1000 * 3; // 升起手势最大事件间隔3S
+	var COMPARE_FRAME = 5;
+
+	function checkTimeInterval () {
+		var flag;
+		var curTime = +new Date();
+		if (!lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL) {
+			flag = true;
+		} else {
+			flag = false;
+		}
+		return flag;
+
+	}
 
 	function computeAngle (a, b) {
         // 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
@@ -34,6 +49,13 @@ define(function () {
 
 	RiseDockGesture.prototype.validate = function (controller, frame) {
 
+		var checkIntervalResult = checkTimeInterval();
+		// 如果为真，则代表允许继续验证
+		// 如果为假，则还在没有超过两个手势的最大的时间间隔
+		if (!checkIntervalResult) {
+			return;
+		}
+
 		if (!controller) return false;
 
 		// 验证条件：必须存在双手
@@ -42,7 +64,7 @@ define(function () {
 			rightHand = getHands(frame).rightHand;
 			leftHand = getHands(frame).leftHand;
 
-			var previousFrame = controller.frame(10); // 与前十帧进行比较，这里可以自动调节
+			var previousFrame = controller.frame(COMPARE_FRAME); // 与前十帧进行比较，这里可以自动调节
 			if (!previousFrame.hands.length || previousFrame.hands.length != 2) {
 				return false;
 			}
@@ -55,8 +77,9 @@ define(function () {
 				&& (leftHand.palmPosition[1] > prevLeftHand.palmPosition[1])
 				// 验证条件：双手手掌朝下
 				&& Math.abs(computeAngle(leftHand.palmNormal, [0,-1,0])) < 20
-				&& Math.abs(computeAngle(rightHand.palmNormal, [0,-1,0])) < 20
+				// && Math.abs(computeAngle(rightHand.palmNormal, [0,-1,0])) < 20
 				) {
+				lastTimestamp = +new Date();
 				return true;
 			}
 
