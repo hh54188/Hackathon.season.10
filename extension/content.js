@@ -2150,6 +2150,33 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         }
         return !1;
     }, RotateGesture;
+}), define("gesture_engine/gestures/MenuGesture", [], function() {
+    var rightHand, leftHand, prevRightHand, prevLeftHand, lastTimestamp = 0, MAX_INTERVAL = 3e3, COMPARE_FRAME = 5;
+    function checkTimeInterval() {
+        var flag, curTime = +(new Date);
+        return !lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL ? flag = !0 : flag = !1, flag;
+    }
+    function computeAngle(a, b) {
+        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
+        return angle;
+    }
+    function getHands(frame) {
+        var hands = {};
+        return frame.hands[0].type == "right" ? (hands.rightHand = frame.hands[0], hands.leftHand = frame.hands[1]) : (hands.rightHand = frame.hands[1], hands.leftHand = frame.hands[0]), hands;
+    }
+    function MenuGesture() {}
+    return MenuGesture.prototype.validate = function(controller, frame) {
+        var checkIntervalResult = checkTimeInterval();
+        if (!checkIntervalResult) return !1;
+        if (!controller) return !1;
+        if (frame.hands.length && frame.hands.length == 1 && frame.hands[0].type == "left") {
+            var leftHand = frame.hands[0], fingers = leftHand.fingers;
+            thumb = fingers[0], index = fingers[1], middle = fingers[2], ring = fingers[3], pinky = fingers[4];
+            var thumbAngle = computeAngle(thumb.direction, [ 0, -1, 0 ]), indexAngle = computeAngle(index.direction, [ 0, -1, 0 ]), middleAngle = computeAngle(middle.direction, [ 0, -1, 0 ]), ringAngle = computeAngle(ring.direction, [ 0, -1, 0 ]), pinkyAngle = computeAngle(pinky.direction, [ 0, -1, 0 ]);
+            if (Math.abs(90 - thumbAngle) < 20 && Math.abs(90 - indexAngle) < 20 && middleAngle < 30 && ringAngle < 30 && Math.abs(90 - pinkyAngle) < 20) return lastTimestamp = +(new Date), !0;
+        }
+        return !1;
+    }, MenuGesture;
 });
 
 var toArray = function(arguments) {
@@ -2162,7 +2189,7 @@ var toArray = function(arguments) {
     return Object.prototype.toString.call(str) == "[object String]" ? !0 : !1;
 };
 
-define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture", "./gestures/RotateGesture" ], function(TranslateGesture) {
+define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture", "./gestures/RotateGesture", "./gestures/MenuGesture" ], function(TranslateGesture) {
     var nativeGestureTypes = [ "circle", "keyTap", "screenTap", "swipe" ], gestures = function GestureValidate(gestures) {
         var result = {}, matchName = /(\w+)Gesture/;
         return toArray(gestures).forEach(function(Gesture) {
@@ -2446,47 +2473,6 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         _checkActionInterval() && (onProcessing = !0, _callback(gesture));
     }
     return entry;
-}), define("apis/wall", [], function() {
-    var undercover = document.createElement("div");
-    undercover.classList.add("undercover"), undercover.innerHTML = [ '<div class="leap-container">', '<ul class="list first-row">', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', "</ul>", '<ul class="list second-row"></ul>', "</div>" ].join("");
-    var hasInit = !1;
-    hasInit || (injectStyle(), hasInit = !0);
-    function injectStyle() {
-        var head = document.head, cssText = ".undercover{z-index:999999;background:black;position:fixed;left:0;top:0;width:100%;height:100%;opacity:0.9;perspective:800px;}.item{width:150px;height:100px;border:5px solid white;box-shadow:0 0 10px black;transform-style:preserve-3d;}.item:hover,.leap-hover{transform:translateZ(35px);transition:all .3s;}.leap-container{margin:120px auto 0;width:950px;transform-style:preserve-3d;transform:rotateY(10deg);transition:all .3s;}.wrap{float:left;margin:0 0 0 20px;}.list{width:100%;height:110px;display:block;margin-bottom:50px;}", styleBlock = document.createElement("style");
-        styleBlock.innerHTML = cssText, head.appendChild(styleBlock);
-    }
-    return {
-        init: function() {
-            document.body.appendChild(undercover);
-        },
-        destory: function() {
-            document.body.removeChild(undercover);
-        }
-    };
-}), define("gesture_handlers/circle", [ "../apis/wall" ], function(WAPI) {
-    var lastTimestamp = 0, MAX_INTERVAL = 2e3, ENABLE = !1;
-    function checkTimeInterval() {
-        var flag, curTime = +(new Date);
-        return !lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL ? flag = !0 : flag = !1, flag;
-    }
-    function haveGesture(frame, name) {
-        for (var g = 0; g < frame.gestures.length; g++) {
-            var gesture = frame.gestures[g];
-            if (gesture.type == name) return !0;
-        }
-        return !1;
-    }
-    function longValidate(control) {
-        var frameNeed = 30;
-        for (var i = 1; i <= frameNeed; i++) if (!haveGesture(control.frame(i), "circle")) return !1;
-        return !0;
-    }
-    function entry(control, frame) {
-        var checkIntervalResult = checkTimeInterval();
-        if (!checkIntervalResult) return !1;
-        longValidate(control) && (ENABLE ? (console.debug("DISENABLE WALL!"), lastTimestamp = +(new Date), WAPI.destory(), ENABLE = !1, window.ENABLE_WALL = !1) : (console.debug("ENABLE WALL!"), lastTimestamp = +(new Date), WAPI.init(), ENABLE = !0, window.DISENABLE_WALL = !0));
-    }
-    return entry;
 }), define("gesture_handlers/translate", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
     var leftHand, rightHand;
     function entry(controller, frame) {
@@ -2521,20 +2507,55 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         }
     }
     return entry;
+}), define("apis/menu", [], function() {
+    var menu = document.createElement("div");
+    menu.innerHTML = [ '<div class="menu">', '<div class="menu-wrap">', "<ul>", '<li class="menu-item">菜单1</li>', '<li class="menu-item">菜单2</li>', '<li class="menu-item">菜单3</li>', "</ul>", "</div>", "</div>" ].join("");
+    var undercover = document.createElement("div");
+    undercover.style.cssText = "z-index:999;width:100%;height:100%;background:black;opacity:0.8;position:fixed;left:0;top:0";
+    var hasInit = !1;
+    function injectStyle() {
+        var head = document.head, cssText = ".menu{z-index:999999;perspective:800px;width:300px;height:420px;position:fixed;left:50%;margin-left:-150px;top:50%;margin-top:-210px;}.menu-item{height:140px;border-bottom:3px solid white;}.menu-item-hover{box-shadow:0 0 10px inset;}.menu-item:last{border-bottom:none;}.menu-wrap{width:100%;height:100%;transform-style:preserve-3d;transition:all .2s;background:skyblue;}", styleBlock = document.createElement("style");
+        styleBlock.innerHTML = cssText, head.appendChild(styleBlock);
+    }
+    return hasInit || (injectStyle(), hasInit = !0), {
+        init: function() {
+            document.body.appendChild(undercover), document.body.appendChild(menu);
+        },
+        destory: function() {
+            console.debug("DESTORY"), document.body.removeChild(menu), document.body.removeChild(undercover);
+        }
+    };
+}), define("gesture_handlers/menu", [ "../apis/menu" ], function(Menu) {
+    function entry(control, frame) {
+        console.debug("MENU!"), window.ENABLE_MENU ? (Menu.destory(), window.ENABLE_MENU = !1) : (Menu.init(), window.ENABLE_MENU = !0);
+    }
+    return entry;
 }), requirejs.config({
     baseUrl: "./src/"
 }), window.onload = function() {
-    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/circle", "./gesture_handlers/translate", "./gesture_handlers/risedock", "./gesture_handlers/rotate" ], function(Engine, swipeHandler, circleHandler, translateHandler, risedockHandler, rotateHandler) {
+    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock", "./gesture_handlers/rotate", "./gesture_handlers/menu" ], function(Engine, swipeHandler, translateHandler, risedockHandler, rotateHandler, menuHandler) {
         if (!window.Leap) return;
         var controller = new Leap.Controller({
             enableGestures: !0
         }), engine;
         controller.on("connect", function() {
-            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("circle", circleHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler), engine.on("rotate", rotateHandler);
+            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler), engine.on("rotate", rotateHandler), engine.on("menu", menuHandler);
         }), controller.on("gesture", function(gesture, frame) {
             engine.gestureHappened(gesture, frame);
-        }), controller.on("frame", function(frame) {
+        });
+        function showHover(seq) {
+            if (seq > 3 || seq < 1) return;
+            var items = document.querySelectorAll(".menu-item");
+            if (!items) return;
+            items[0].classList.remove("menu-item-hover"), items[1].classList.remove("menu-item-hover"), items[2].classList.remove("menu-item-hover"), items[seq - 1].classList.add("menu-item-hover");
+        }
+        controller.on("frame", function(frame) {
             engine.frameHappened(frame);
+            if (window.ENABLE_MENU && frame.hands.length > 0) {
+                var pointable = frame.pointables[0], tipPosition = pointable.tipPosition, interactionBox = frame.interactionBox, normalizedPosition = interactionBox.normalizePoint(tipPosition, !0), percentX = (.5 - normalizedPosition[0]).toFixed(1), percentY = (.5 - normalizedPosition[1]).toFixed(1), target = document.querySelector(".menu-wrap");
+                if (!target) return;
+                target.style.transform = "rotateX(" + 20 * percentY + "deg)" + "rotateY(" + 20 * percentX + "deg)", showHover(parseInt((1 - normalizedPosition[1]) / .3));
+            }
         }), controller.on("disconnect", function() {
             console.error("disconnect");
         }), controller.on("deviceDisconnected", function() {

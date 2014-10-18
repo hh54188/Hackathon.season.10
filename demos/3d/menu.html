@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<style type="text/css">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	li {
+		list-style: none;
+	}
+	.menu {
+		z-index: 999999;
+		perspective: 800px;
+
+		width: 300px;
+		height: 420px;
+
+		position: fixed;
+
+		left: 50%;
+		margin-left: -150px;
+
+		top: 50%;
+		margin-top: -210px;
+	}
+	.menu-item {
+		height: 140px;
+		border-bottom: 3px solid white;
+	}
+	.menu-item-hover {
+		box-shadow: 0 0 10px inset;
+	}
+	.menu-item:last {
+		border-bottom:none;
+	}
+
+	.menu-wrap {
+		width: 100%;
+		height: 100%;
+
+		transform-style: preserve-3d;
+		transition: all .2s;
+		background: skyblue;
+	}
+	</style>
+</head>
+<body >
+	<div class="menu">
+		<div class="menu-wrap">
+			<ul>
+				<li class="menu-item">菜单1</li>
+				<li class="menu-item">菜单2</li>
+				<li class="menu-item">菜单3</li>
+			</ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var rotateY = 0, rotateX = 0;
+		var ROTATE_X = 20, ROTATE_Y = 20;
+
+		var target = document.querySelector(".menu-wrap");
+		var items = document.querySelectorAll(".menu-item");
+
+		var controller = new Leap.Controller({
+			enableGestures: true
+		});
+
+		function showHover (seq) {
+			items[0].classList.remove("menu-item-hover");
+			items[1].classList.remove("menu-item-hover");
+			items[2].classList.remove("menu-item-hover");
+
+			items[seq - 1].classList.add("menu-item-hover");
+		}
+
+		controller.on("frame", function(frame){
+
+		    if(frame.hands.length > 0) {
+
+				var pointable = frame.pointables[0]; 
+		        var tipPosition = pointable.tipPosition;
+		        var interactionBox = frame.interactionBox;
+		        var normalizedPosition = interactionBox.normalizePoint(tipPosition, true);
+
+		        var percentX = (0.5 - normalizedPosition[0]).toFixed(1);
+		        var percentY = (0.5 - normalizedPosition[1]).toFixed(1);
+
+		        target.style.transform = "rotateX(" + ROTATE_Y * percentY + "deg)" + "rotateY(" + ROTATE_X * percentX + "deg)";
+		    
+
+		        var part = (1 - normalizedPosition[1]) / 0.3;
+		        showHover(parseInt(part));
+		    }
+		});
+
+		controller.connect();
+	</script>
+</body>
+</html>

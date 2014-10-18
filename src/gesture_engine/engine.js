@@ -25,7 +25,8 @@ var isString = function (str) {
 define([
         "./gestures/TranslateGesture",
         "./gestures/RiseDockGesture",
-        "./gestures/RotateGesture"
+        "./gestures/RotateGesture",
+        "./gestures/MenuGesture"
     ], function (TranslateGesture) {
 
     var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];

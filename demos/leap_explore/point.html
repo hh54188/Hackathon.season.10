@@ -29,21 +29,19 @@
 <body style="perspective: 800px;">
 	<div id="target"></div>
 	<script type="text/javascript">
-
+		var extendedFingers = 0;
 		controller.on("frame", function(frame){
 
 		    if(frame.hands.length > 0) {
-				
-				var rightHand = frame.hands[0]; 
-		        var interactionBox = frame.interactionBox;
-		        var normalizedPosition = interactionBox.normalizePoint(rightHand.palmPosition, true);
 
-		        var left = window.innerWidth * normalizedPosition[0];
-		        var top = window.innerHeight * (1 - normalizedPosition[1]);
-
-		        // target.style.left = left + "px";
-		        // target.style.top = top + "px";
-		        
+		    	var fingers = frame.hands[0].fingers;
+		    	for(var f = 0; f < fingers.length; f++){
+			        var finger = fingers[f];
+			        if(finger.extended) 
+			        	extendedFingers++;
+				}
+				console.log(extendedFingers);
+				extendedFingers = 0;
 		    }
 		});
 
