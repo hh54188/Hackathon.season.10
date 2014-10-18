@@ -8,12 +8,14 @@ window.onload = function () {
         [
             "./gesture_engine/engine", 
             "./gesture_handlers/swipe",
+            "./gesture_handlers/circle",
             "./gesture_handlers/translate",
             "./gesture_handlers/risedock",
             "./gesture_handlers/rotate"
         ], function (
             Engine, 
             swipeHandler,
+            circleHandler,
             translateHandler,
             risedockHandler,
             rotateHandler
@@ -34,6 +36,7 @@ window.onload = function () {
 
             engine = new Engine(controller);
             engine.on("swipe", swipeHandler);
+            engine.on("circle", circleHandler);
             engine.on("translate", translateHandler);
             engine.on("risedock", risedockHandler);
             engine.on("rotate", rotateHandler);

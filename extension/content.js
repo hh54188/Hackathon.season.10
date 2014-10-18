@@ -2357,18 +2357,18 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         dock: document.querySelector(".album-pnl")
     };
     function check() {
-        for (var el in doms) if (!doms[el]) return !1;
+        for (var el in doms) if (!doms[el]) return console.debug("LACK SOME ELEMENTS", el), !1;
         return !0;
     }
     if (!!hasInit || !check()) return Notify.log("初始化失败"), console.debug("API INIT FAILED"), !1;
     document.body.style.perspective = "1000px";
     var imgTarget = doms.img;
-    imgTarget.style.transformStyle = "preserve-3d", imgTarget.style.transition = "all .1s", Notify.log("初始化完成"), console.debug("API INIT CONPLETE"), hasInit = !0;
+    imgTarget.style.transformStyle = "preserve-3d", Notify.log("初始化完成"), console.debug("API INIT CONPLETE"), hasInit = !0;
     var emptyFn = function() {
         console.debug("NO API");
-    }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2;
+    }, rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, TRANS_TIMES = 2, TRANS_TIMES_Z = 4;
     function generateTransform() {
-        return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
+        return [ "translateX(" + translateX * TRANS_TIMES + "px)", "translateY(" + translateY * TRANS_TIMES + "px)", "translateZ(" + translateZ * TRANS_TIMES_Z + "px)", "rotateX(" + rotateX + "deg)", "rotateY(" + rotateY + "deg)", "rotateZ(" + rotateZ + "deg)" ].join(" ");
     }
     function reset(target) {
         rotateX = 0, rotateY = 0, rotateZ = 0, translateX = 0, translateY = 0, translateZ = 0, target.style.transform = generateTransform();
@@ -2446,6 +2446,47 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         _checkActionInterval() && (onProcessing = !0, _callback(gesture));
     }
     return entry;
+}), define("apis/wall", [], function() {
+    var undercover = document.createElement("div");
+    undercover.classList.add("undercover"), undercover.innerHTML = [ '<div class="leap-container">', '<ul class="list first-row">', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', '<li class="wrap"><img class="item" src="./apple.jpg"></li>', "</ul>", '<ul class="list second-row"></ul>', "</div>" ].join("");
+    var hasInit = !1;
+    hasInit || (injectStyle(), hasInit = !0);
+    function injectStyle() {
+        var head = document.head, cssText = ".undercover{z-index:999999;background:black;position:fixed;left:0;top:0;width:100%;height:100%;opacity:0.9;perspective:800px;}.item{width:150px;height:100px;border:5px solid white;box-shadow:0 0 10px black;transform-style:preserve-3d;}.item:hover,.leap-hover{transform:translateZ(35px);transition:all .3s;}.leap-container{margin:120px auto 0;width:950px;transform-style:preserve-3d;transform:rotateY(10deg);transition:all .3s;}.wrap{float:left;margin:0 0 0 20px;}.list{width:100%;height:110px;display:block;margin-bottom:50px;}", styleBlock = document.createElement("style");
+        styleBlock.innerHTML = cssText, head.appendChild(styleBlock);
+    }
+    return {
+        init: function() {
+            document.body.appendChild(undercover);
+        },
+        destory: function() {
+            document.body.removeChild(undercover);
+        }
+    };
+}), define("gesture_handlers/circle", [ "../apis/wall" ], function(WAPI) {
+    var lastTimestamp = 0, MAX_INTERVAL = 2e3, ENABLE = !1;
+    function checkTimeInterval() {
+        var flag, curTime = +(new Date);
+        return !lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL ? flag = !0 : flag = !1, flag;
+    }
+    function haveGesture(frame, name) {
+        for (var g = 0; g < frame.gestures.length; g++) {
+            var gesture = frame.gestures[g];
+            if (gesture.type == name) return !0;
+        }
+        return !1;
+    }
+    function longValidate(control) {
+        var frameNeed = 30;
+        for (var i = 1; i <= frameNeed; i++) if (!haveGesture(control.frame(i), "circle")) return !1;
+        return !0;
+    }
+    function entry(control, frame) {
+        var checkIntervalResult = checkTimeInterval();
+        if (!checkIntervalResult) return !1;
+        longValidate(control) && (ENABLE ? (console.debug("DISENABLE WALL!"), lastTimestamp = +(new Date), WAPI.destory(), ENABLE = !1, window.ENABLE_WALL = !1) : (console.debug("ENABLE WALL!"), lastTimestamp = +(new Date), WAPI.init(), ENABLE = !0, window.DISENABLE_WALL = !0));
+    }
+    return entry;
 }), define("gesture_handlers/translate", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
     var leftHand, rightHand;
     function entry(controller, frame) {
@@ -2483,13 +2524,13 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
 }), requirejs.config({
     baseUrl: "./src/"
 }), window.onload = function() {
-    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock", "./gesture_handlers/rotate" ], function(Engine, swipeHandler, translateHandler, risedockHandler, rotateHandler) {
+    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/circle", "./gesture_handlers/translate", "./gesture_handlers/risedock", "./gesture_handlers/rotate" ], function(Engine, swipeHandler, circleHandler, translateHandler, risedockHandler, rotateHandler) {
         if (!window.Leap) return;
         var controller = new Leap.Controller({
             enableGestures: !0
         }), engine;
         controller.on("connect", function() {
-            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler), engine.on("rotate", rotateHandler);
+            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("circle", circleHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler), engine.on("rotate", rotateHandler);
         }), controller.on("gesture", function(gesture, frame) {
             engine.gestureHappened(gesture, frame);
         }), controller.on("frame", function(frame) {

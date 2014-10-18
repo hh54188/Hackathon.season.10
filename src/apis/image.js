@@ -25,8 +25,8 @@ define (["./notify"], function (Notify) {
 	function check() {
 		for (var el in doms) {
 			if (!doms[el]) {
+				console.debug("LACK SOME ELEMENTS", el);
 				return false;
-				console.debug("LACK SOME ELEMENTS");
 			}
 		}
 		return true;
@@ -39,7 +39,7 @@ define (["./notify"], function (Notify) {
 		var imgTarget = doms.img; 
 
 		imgTarget.style.transformStyle = "preserve-3d";
-		imgTarget.style.transition = "all .1s";
+		// imgTarget.style.transition = "all .1s";
 
 		Notify.log("初始化完成");
 		console.debug("API INIT CONPLETE");
@@ -62,13 +62,14 @@ define (["./notify"], function (Notify) {
 		translateZ = 0;
 
 	var TRANS_TIMES = 2;
+	var TRANS_TIMES_Z = 4;
 
 	function generateTransform () {
 
 		return [
 			"translateX(" + translateX * TRANS_TIMES + "px)",
 			"translateY(" + translateY * TRANS_TIMES + "px)",
-			"translateZ(" + translateZ * TRANS_TIMES + "px)",
+			"translateZ(" + translateZ * TRANS_TIMES_Z + "px)",
 			"rotateX(" + rotateX + "deg)",
 			"rotateY(" + rotateY + "deg)",
 			"rotateZ(" + rotateZ + "deg)"
