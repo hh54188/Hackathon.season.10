@@ -117,7 +117,7 @@ define (["./notify"], function (Notify) {
 		},
 
 		/**
-		 * 切换至下一张图片
+		 * 切换至下p一张图片
 		 */
 		nextImage: function () {
 			doms.nextBtn.click();

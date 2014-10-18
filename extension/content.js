@@ -2105,6 +2105,33 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         }
         return !1;
     }, TranslateGesture;
+}), define("gesture_engine/gestures/RiseDockGesture", [], function() {
+    var rightHand, leftHand, prevRightHand, prevLeftHand, lastTimestamp = 0, MAX_INTERVAL = 5e3, COMPARE_FRAME = 5;
+    function checkTimeInterval() {
+        var flag, curTime = +(new Date);
+        return !lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL ? flag = !0 : flag = !1, flag;
+    }
+    function computeAngle(a, b) {
+        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
+        return angle;
+    }
+    function getHands(frame) {
+        var hands = {};
+        return frame.hands[0].type == "right" ? (hands.rightHand = frame.hands[0], hands.leftHand = frame.hands[1]) : (hands.rightHand = frame.hands[1], hands.leftHand = frame.hands[0]), hands;
+    }
+    function RiseDockGesture() {}
+    return RiseDockGesture.prototype.validate = function(controller, frame) {
+        var checkIntervalResult = checkTimeInterval();
+        if (!checkIntervalResult) return !1;
+        if (!controller) return !1;
+        if (frame.hands.length && frame.hands.length == 1 && frame.hands[0].type == "right") {
+            var rightHand = frame.hands[0], fingers = rightHand.fingers;
+            thumb = fingers[0], index = fingers[1], middle = fingers[2], ring = fingers[3], pinky = fingers[4];
+            var thumbAngle = computeAngle(thumb.direction, [ 0, -1, 0 ]), indexAngle = computeAngle(index.direction, [ 0, -1, 0 ]), middleAngle = computeAngle(middle.direction, [ 0, -1, 0 ]), ringAngle = computeAngle(ring.direction, [ 0, -1, 0 ]), pinkyAngle = computeAngle(pinky.direction, [ 0, -1, 0 ]);
+            if (Math.abs(90 - thumbAngle) < 20 && Math.abs(90 - indexAngle) < 20 && middleAngle < 30 && ringAngle < 30 && Math.abs(90 - pinkyAngle) < 20) return lastTimestamp = +(new Date), !0;
+        }
+        return !1;
+    }, RiseDockGesture;
 });
 
 var toArray = function(arguments) {
@@ -2117,7 +2144,7 @@ var toArray = function(arguments) {
     return Object.prototype.toString.call(str) == "[object String]" ? !0 : !1;
 };
 
-define("gesture_engine/engine", [ "./gestures/TranslateGesture" ], function(TranslateGesture) {
+define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture" ], function(TranslateGesture) {
     var nativeGestureTypes = [ "circle", "keyTap", "screenTap", "swipe" ], gestures = function GestureValidate(gestures) {
         var result = {}, matchName = /(\w+)Gesture/;
         return toArray(gestures).forEach(function(Gesture) {

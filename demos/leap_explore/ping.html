@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+	<script type="text/javascript">
+		var controller = new Leap.Controller({
+		  host: '172.21.236.51',
+		  enableGestures: true
+		});
+
+		controller.on("frame", function (frame) {
+			console.log(frame);
+		});
+
+		controller.connect();
+	</script>
+</head>
+<body>
+
+</body>
+</html>

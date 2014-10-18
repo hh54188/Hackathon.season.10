@@ -69,19 +69,6 @@
 				var middleAngle = compute(middle.direction, [0, -1, 0]);
 				var ringAngle = compute(ring.direction, [0, -1, 0]);
 				var pinkyAngle = compute(pinky.direction, [0, -1, 0]);
-
-				// 需要识别的手势:
-				// 大拇指，食指，中指张开
-				// 无名指，小拇指折叠
-				// if (Math.abs(90 - thumbAngle) < 20
-				// 	&& Math.abs(90 - indexAngle) < 20
-				// 	&& Math.abs(90 - middleAngle) < 20
-				// 	&& ringAngle < 30
-				// 	&& pinkyAngle < 30
-				// 	) {
-
-				// 	console.log("Recognized!", ringAngle, pinkyAngle);
-				// }
 				 
 				if (Math.abs(90 - thumbAngle) < 20
 					&& Math.abs(90 - indexAngle) < 20

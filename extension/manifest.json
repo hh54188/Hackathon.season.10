@@ -14,8 +14,8 @@
     "content_scripts": [
 	    {
 	        "matches": ["http://image.baidu.com/*"],
-	        "js": ["content.js"],
-            "run_at": "document_start" // https://developer.chrome.com/extensions/content_scripts#run_at
+	        "js": ["content.js"]
+            //"run_at": "document_start" // https://developer.chrome.com/extensions/content_scripts#run_at
 	    }
 	]
 }

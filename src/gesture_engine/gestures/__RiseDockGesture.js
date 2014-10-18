@@ -3,7 +3,7 @@ define(function () {
 	var rightHand, leftHand;
 	var prevRightHand, prevLeftHand;
 	var lastTimestamp = 0;
-	var MAX_INTERVAL = 1000 * 5; // 升起手势最大事件间隔3S
+	var MAX_INTERVAL = 1000 * 3; // 升起手势最大事件间隔3S
 	var COMPARE_FRAME = 5;
 
 	function checkTimeInterval () {
@@ -53,42 +53,37 @@ define(function () {
 		// 如果为真，则代表允许继续验证
 		// 如果为假，则还在没有超过两个手势的最大的时间间隔
 		if (!checkIntervalResult) {
-			return false;
+			return;
 		}
 
 		if (!controller) return false;
 
-		if (frame.hands.length 
-			&& frame.hands.length == 1
-			&& frame.hands[0].type == "right") {
+		// 验证条件：必须存在双手
+		if (frame.hands.length && frame.hands.length == 2) {
 
-			var rightHand = frame.hands[0];
-			var fingers = rightHand.fingers;
+			rightHand = getHands(frame).rightHand;
+			leftHand = getHands(frame).leftHand;
 
-			thumb = fingers[0];
-			index = fingers[1];
-			middle = fingers[2];
-			ring = fingers[3];
-			pinky = fingers[4];
+			var previousFrame = controller.frame(COMPARE_FRAME); // 与前十帧进行比较，这里可以自动调节
+			if (!previousFrame.hands.length || previousFrame.hands.length != 2) {
+				return false;
+			}
+			prevRightHand = getHands(previousFrame).rightHand;
+			prevLeftHand = getHands(previousFrame).leftHand;
 
-			var thumbAngle = computeAngle(thumb.direction, [0, -1, 0]);
-			var indexAngle = computeAngle(index.direction, [0, -1, 0]);
-			var middleAngle = computeAngle(middle.direction, [0, -1, 0]);
-			var ringAngle = computeAngle(ring.direction, [0, -1, 0]);
-			var pinkyAngle = computeAngle(pinky.direction, [0, -1, 0]);
-			 
-			if (Math.abs(90 - thumbAngle) < 20
-				&& Math.abs(90 - indexAngle) < 20
-				&& middleAngle < 30
-				&& ringAngle < 30
-				&& Math.abs(90 - pinkyAngle) < 20
+			// 验证条件：右手高度必须高于前十帧
+			if ((rightHand.palmPosition[1] > prevRightHand.palmPosition[1])
+				// 验证条件：左手高度必须高于前十帧
+				&& (leftHand.palmPosition[1] > prevLeftHand.palmPosition[1])
+				// 验证条件：双手手掌朝下
+				&& Math.abs(computeAngle(leftHand.palmNormal, [0,-1,0])) < 20
+				// && Math.abs(computeAngle(rightHand.palmNormal, [0,-1,0])) < 20
 				) {
-
 				lastTimestamp = +new Date();
 				return true;
 			}
-		}
 
+		}
 		return false;
 	}
 
