@@ -2106,7 +2106,7 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         return !1;
     }, TranslateGesture;
 }), define("gesture_engine/gestures/RiseDockGesture", [], function() {
-    var rightHand, leftHand, prevRightHand, prevLeftHand, lastTimestamp = 0, MAX_INTERVAL = 5e3, COMPARE_FRAME = 5;
+    var rightHand, leftHand, prevRightHand, prevLeftHand, lastTimestamp = 0, MAX_INTERVAL = 3e3, COMPARE_FRAME = 5;
     function checkTimeInterval() {
         var flag, curTime = +(new Date);
         return !lastTimestamp || curTime - lastTimestamp > MAX_INTERVAL ? flag = !0 : flag = !1, flag;
@@ -2132,6 +2132,24 @@ define("gesture_engine/gestures/TranslateGesture", [], function() {
         }
         return !1;
     }, RiseDockGesture;
+}), define("gesture_engine/gestures/RotateGesture", [], function() {
+    var rightHand, leftHand;
+    function computeAngle(a, b) {
+        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
+        return angle;
+    }
+    function RotateGesture() {}
+    return RotateGesture.prototype.validate = function(controller, frame) {
+        if (!controller) return !1;
+        var hands = frame.hands;
+        if (frame.hands.length && frame.hands.length == 2) {
+            frame.hands[0].type == "right" ? (rightHand = frame.hands[0], leftHand = frame.hands[1]) : (rightHand = frame.hands[1], leftHand = frame.hands[0]);
+            if (leftHand.palmPosition[2] > rightHand.palmPosition[2]) return !1;
+            var palmNormal = leftHand.palmNormal, angle = computeAngle(palmNormal, [ 0, -1, 0 ]);
+            return Math.abs(angle - 90) > 30 ? !1 : rightHand.grabStrength != 1 ? !1 : !0;
+        }
+        return !1;
+    }, RotateGesture;
 });
 
 var toArray = function(arguments) {
@@ -2144,7 +2162,7 @@ var toArray = function(arguments) {
     return Object.prototype.toString.call(str) == "[object String]" ? !0 : !1;
 };
 
-define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture" ], function(TranslateGesture) {
+define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/RiseDockGesture", "./gestures/RotateGesture" ], function(TranslateGesture) {
     var nativeGestureTypes = [ "circle", "keyTap", "screenTap", "swipe" ], gestures = function GestureValidate(gestures) {
         var result = {}, matchName = /(\w+)Gesture/;
         return toArray(gestures).forEach(function(Gesture) {
@@ -2362,7 +2380,11 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
                 var target = doms.img;
                 target.style.transform = generateTransform();
             },
-            rotate: function() {}
+            rotate: function(deltaRotate) {
+                rotateZ += deltaRotate;
+                var target = doms.img;
+                target.style.transform = generateTransform();
+            }
         },
         init: function() {
             var body = document.body;
@@ -2426,15 +2448,11 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
     return entry;
 }), define("gesture_handlers/translate", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
     var leftHand, rightHand;
-    function computeAngle(a, b) {
-        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
-        return angle;
-    }
     function entry(controller, frame) {
         if (!controller) return;
         if (frame.hands.length && frame.hands.length == 2) {
             frame.hands[0].type == "right" ? (rightHand = frame.hands[0], leftHand = frame.hands[1]) : (rightHand = frame.hands[1], leftHand = frame.hands[0]);
-            var palmNormal = leftHand.palmNormal, angle = computeAngle(palmNormal, [ 0, -1, 0 ]), previousFrame = controller.frame(1), movement = rightHand.translation(previousFrame), deltaX = movement[0], deltaY = movement[1], deltaZ = movement[2];
+            var previousFrame = controller.frame(1), movement = rightHand.translation(previousFrame), deltaX = movement[0], deltaY = movement[1], deltaZ = movement[2];
             ImageAPI.threed.translate(deltaX, deltaY, deltaZ);
         }
     }
@@ -2444,16 +2462,34 @@ define("gesture_engine/engine", [ "./gestures/TranslateGesture", "./gestures/Ris
         console.debug("DOCK RISE"), ImageAPI.pullUpDock();
     }
     return entry;
+}), define("gesture_handlers/rotate", [ "../apis/image", "../apis/notify" ], function(ImageAPI, Notify) {
+    var leftHand, rightHand, previousRightHand;
+    function computeAngle(a, b) {
+        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b))), angle = cos / Math.PI * 180;
+        return angle;
+    }
+    function entry(controller, frame) {
+        if (!controller) return;
+        if (frame.hands.length && frame.hands.length == 2) {
+            frame.hands[0].type == "right" ? (rightHand = frame.hands[0], leftHand = frame.hands[1]) : (rightHand = frame.hands[1], leftHand = frame.hands[0]);
+            var previousFrame = controller.frame(1);
+            if (!previousFrame.hands || previousFrame.hands.length != 2) return !1;
+            previousFrame.hands[0].type == "right" ? previousRightHand = previousFrame.hands[0] : previousRightHand = previousFrame.hands[1];
+            var previousAngleZ = previousRightHand.roll() / Math.PI * 180 * -1, angleZ = rightHand.roll() / Math.PI * 180 * -1, deltaAngle = angleZ - previousAngleZ;
+            ImageAPI.threed.rotate(deltaAngle);
+        }
+    }
+    return entry;
 }), requirejs.config({
     baseUrl: "./src/"
 }), window.onload = function() {
-    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock" ], function(Engine, swipeHandler, translateHandler, risedockHandler) {
+    require([ "./gesture_engine/engine", "./gesture_handlers/swipe", "./gesture_handlers/translate", "./gesture_handlers/risedock", "./gesture_handlers/rotate" ], function(Engine, swipeHandler, translateHandler, risedockHandler, rotateHandler) {
         if (!window.Leap) return;
         var controller = new Leap.Controller({
             enableGestures: !0
         }), engine;
         controller.on("connect", function() {
-            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler);
+            engine = new Engine(controller), engine.on("swipe", swipeHandler), engine.on("translate", translateHandler), engine.on("risedock", risedockHandler), engine.on("rotate", rotateHandler);
         }), controller.on("gesture", function(gesture, frame) {
             engine.gestureHappened(gesture, frame);
         }), controller.on("frame", function(frame) {

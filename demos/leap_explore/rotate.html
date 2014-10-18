@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rotate</title>
+	<script type="text/javascript" src="../../src/lib/leap.js"></script>
+</head>
+<body>
+	<img src="http://www.baidu.com/img/bdlogo.png" 
+	style="position:absolute;
+	top:50%;
+	margin-top: -129px;
+	left:50%;
+	margin-left: -270px;">
+	<script type="text/javascript">
+		var controller = new Leap.Controller();
+		var target = document.querySelector("img");
+		var totalAngle = 0;
+
+		function compute (a, b) {
+			
+			// 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
+			var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b)));
+			var angle = (cos / Math.PI) * 180;
+
+			return angle;
+		}
+
+		controller.on("frame", function (frame) {
+
+			if (frame.hands.length) {
+
+				var rightHand = frame.hands[0];
+				if (rightHand.type == "left") {
+					return;
+				}
+
+				if (rightHand.grabStrength != 1) {
+					return;
+				}
+
+				// 解决方案三：间接计算偏移位移
+				var previousFrame = controller.frame(1);
+				if (!previousFrame.hands 
+					|| previousFrame.hands.length != 1 
+					|| previousFrame.hands[0].type != "right") {
+
+					return false;
+				}
+				var previousRightHand = previousFrame.hands[0];
+
+				var previousAngleZ = (previousRightHand.roll() / Math.PI) * 180 * (-1);
+				var angleZ = (rightHand.roll() / Math.PI) * 180 * (-1);
+				totalAngle += (angleZ - previousAngleZ);
+				target.style.transform = "rotateZ(" + totalAngle + "deg)";
+
+				
+				// 解决方案一：计算总偏移位移
+				// var rotateZ = (rightHand.roll() / Math.PI) * 180 * (-1);
+				// target.style.transform = "rotateZ(" + rotateZ + "deg)"
+
+
+
+				// 解决方案二：不可行
+				// var previousFrame = controller.frame(1);
+				// var rotationAroundZAxis = rightHand.rotationAngle(previousFrame, [0,0,1]);
+				// angleSum += rotationAroundZAxis;
+				// console.log("Z Rot:" + angleSum);
+				// console.log((rotationAroundZAxis / Math.PI) * 180);
+			}
+		});
+
+		controller.connect();
+	</script>	
+</body>
+</html>

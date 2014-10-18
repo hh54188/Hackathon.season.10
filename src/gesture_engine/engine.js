@@ -21,10 +21,11 @@ var isString = function (str) {
 };
 
 
-// 有问题的手势：./gestures/RiseDockGesture 
+
 define([
         "./gestures/TranslateGesture",
-        "./gestures/RiseDockGesture"
+        "./gestures/RiseDockGesture",
+        "./gestures/RotateGesture"
     ], function (TranslateGesture) {
 
     var nativeGestureTypes = ["circle", "keyTap", "screenTap", "swipe"];

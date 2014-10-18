@@ -5,13 +5,13 @@ function (ImageAPI, Notify) {
 
     var leftHand, rightHand;
     
-    function computeAngle (a, b) {
-        // 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
-        var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b)));
-        var angle = (cos / Math.PI) * 180;
+    // function computeAngle (a, b) {
+    //     // 空间向量夹角计算：http://www.cnblogs.com/crazyac/articles/1991957.html
+    //     var cos = Math.acos(Leap.vec3.dot(a, b) / (Leap.vec3.len(a) * Leap.vec3.len(b)));
+    //     var angle = (cos / Math.PI) * 180;
 
-        return angle;
-    }
+    //     return angle;
+    // }
 
     function entry (controller, frame) {
 
@@ -32,10 +32,10 @@ function (ImageAPI, Notify) {
                 leftHand = frame.hands[0];
             }
 
-            // 验证条件3：左手手掌不可以朝下
-            // 也就意味着手掌方向于Y轴方向需要垂直（可以允许角度偏差正负不超过30度）
-            var palmNormal = leftHand.palmNormal;
-            var angle = computeAngle(palmNormal, [0,-1,0]);
+            // // 验证条件3：左手手掌不可以朝下
+            // // 也就意味着手掌方向于Y轴方向需要垂直（可以允许角度偏差正负不超过30度）
+            // var palmNormal = leftHand.palmNormal;
+            // var angle = computeAngle(palmNormal, [0,-1,0]);
 
             var previousFrame = controller.frame(1);
             var movement = rightHand.translation(previousFrame);

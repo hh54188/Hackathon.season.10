@@ -102,8 +102,10 @@ define (["./notify"], function (Notify) {
 				target.style.transform = generateTransform();
 			},
 
-			rotate: function () {
-				
+			rotate: function (deltaRotate) {
+				rotateZ += deltaRotate;
+				var target = doms.img;
+				target.style.transform = generateTransform();
 			}
 		},
 

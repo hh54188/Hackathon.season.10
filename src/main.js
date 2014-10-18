@@ -9,12 +9,14 @@ window.onload = function () {
             "./gesture_engine/engine", 
             "./gesture_handlers/swipe",
             "./gesture_handlers/translate",
-            "./gesture_handlers/risedock"
+            "./gesture_handlers/risedock",
+            "./gesture_handlers/rotate"
         ], function (
             Engine, 
             swipeHandler,
             translateHandler,
-            risedockHandler
+            risedockHandler,
+            rotateHandler
         ) {
 
         // leap.js 不兼容AMD格式，加载依赖但无导出接口
@@ -34,6 +36,7 @@ window.onload = function () {
             engine.on("swipe", swipeHandler);
             engine.on("translate", translateHandler);
             engine.on("risedock", risedockHandler);
+            engine.on("rotate", rotateHandler);
             /*
                  1. 把当前帧交给Gesture验证，如果.validate方法返回为true
                  2. 则再由handler再对图片做处理（handler里面会记录图片的当前位置）

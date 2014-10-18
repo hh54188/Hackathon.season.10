@@ -3,7 +3,7 @@ define(function () {
 	var rightHand, leftHand;
 	var prevRightHand, prevLeftHand;
 	var lastTimestamp = 0;
-	var MAX_INTERVAL = 1000 * 5; // 升起手势最大事件间隔3S
+	var MAX_INTERVAL = 1000 * 3; // 升起手势最大事件间隔3S
 	var COMPARE_FRAME = 5;
 
 	function checkTimeInterval () {
